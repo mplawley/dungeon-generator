@@ -1,4 +1,9 @@
-﻿using System.Collections;
+﻿/*
+ * This script controls the player's attack animations and functionality 
+ * 
+ */
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

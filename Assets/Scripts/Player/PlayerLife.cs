@@ -1,4 +1,9 @@
-﻿using System.Collections;
+﻿/*
+ * This script handles the player's life and the player's death condition
+ * 
+ */
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,22 +11,26 @@ using UnityEngine.SceneManagement;
 public class PlayerLife : MonoBehaviour
 {
 	public static PlayerLife instance;
-	public int life;
 
 	[SerializeField]
 	int maxLife;
+
+	[SerializeField]
+	List<GameObject> playerHearts = new List<GameObject>();
 
 	Animator animator;
 
 	void Awake()
 	{
-		if (instance != this)
+		//Singleton
+		if (instance == null)
 		{
+			DontDestroyOnLoad(gameObject);
 			instance = this;
 		}
-		else
+		else if (instance != this)
 		{
-			Destroy (this);
+			Destroy(gameObject);
 		}
 	}
 
@@ -32,6 +41,8 @@ public class PlayerLife : MonoBehaviour
 
 	public void ModifierPlayerLife(int howMuch)
 	{
+		int life = MemoryManager.instance.allGameDataOnSingleton.dungeonData.playerLife;
+
 		life += howMuch;
 
 		//Cap life
@@ -39,6 +50,9 @@ public class PlayerLife : MonoBehaviour
 		{
 			life = maxLife;
 		}
+
+		//Set hearts display..
+		SetPlayerHearts();
 
 		//Death
 		if (life < 0)
@@ -49,6 +63,22 @@ public class PlayerLife : MonoBehaviour
 	}
 
 	//Display player life...
+	public void SetPlayerHearts()
+	{
+		int life = MemoryManager.instance.allGameDataOnSingleton.dungeonData.playerLife;
+
+		//Reset hearts
+		for (int i = 0; i < playerHearts.Count; i++)
+		{
+			playerHearts [i].SetActive (false);
+		}
+
+		//Set hearts anew
+		for (int i = 0; i < life; i++)
+		{
+			playerHearts[i].SetActive (true);
+		}
+	}
 
 	//Player death
 	void PlayerDead()
