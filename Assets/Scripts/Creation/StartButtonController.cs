@@ -11,6 +11,9 @@ public class StartButtonController : MonoBehaviour
 	[SerializeField]
 	GameObject distributeMorePrompt;
 
+	[SerializeField]
+	InputField nameField;
+
 	int trainingPoints;
 
 	public void StartGame()
@@ -25,6 +28,7 @@ public class StartButtonController : MonoBehaviour
 		}
 		else
 		{
+			MemoryManager.instance.allGameDataOnSingleton.dungeonData.playerName = nameField.text;
 			MemoryManager.instance.Save();
 			SceneController.instance.LoadScene("Game");
 		}
