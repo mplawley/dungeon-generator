@@ -460,8 +460,8 @@ PlayerSettings:
   XboxOnePersistentLocalStorageSize: 0
   vrEditorSettings: {}
   cloudServicesEnabled:
-    UNet: 0
-  cloudProjectId: 
-  projectName: 
-  organizationId: 
+    UNet: 1
+  cloudProjectId: 861f2054-f12f-48f4-9b56-73c72e64687c
+  projectName: dungeongenerator (1)
+  organizationId: mark-lawley
   cloudEnabled: 0
