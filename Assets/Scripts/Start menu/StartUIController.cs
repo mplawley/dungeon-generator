@@ -1,7 +1,7 @@
 ﻿/*
  * This script controls the save and load button functionality of the start screen. 
- * It also asks the user to select a save slot upon clicking the New character/Load character
- * buttons. The user's selection is passed on to the CharacterSheetManager.cs so that it knows
+ * It also asks the user to select a save slot upon clicking the new game/load game buttons
+ * buttons. The user's selection is passed on to the MemoryManager so that it knows
  * what persistentDataPath to use for storing character data.
  * 
  */
@@ -62,7 +62,7 @@ public class StartUIController : MonoBehaviour
 	//Directory search for all character files, activating UI elements to let player know which character profiles can be loaded or saved without overwriting
 	public void DirectorySearch()
 	{
-		DirectoryInfo dir = new DirectoryInfo(Application.persistentDataPath + MemoryManager.instance.gameVersion);
+		DirectoryInfo dir = new DirectoryInfo(Application.persistentDataPath + "/dungeongenerator" + "-" + MemoryManager.instance.allGameDataOnSingleton.dungeonData.gameVersion + ".dat");
 		FileInfo[] info = dir.GetFiles("*.*"); //Get all files in directory--that is, any that end with a dot, which is all of them
 
 		//Prepare to display saved/loaded slots to the player
@@ -92,16 +92,6 @@ public class StartUIController : MonoBehaviour
 				toggleLoadList[2].SetActive(true);
 				slotExists = true;
 				break;
-			case ("Slot4.dat"):
-				toggleSaveOverwriteWarningList[3].SetActive(true);
-				toggleLoadList[3].SetActive(true);
-				slotExists = true;
-				break;
-			case ("Slot5.dat"):
-				toggleSaveOverwriteWarningList[4].SetActive(true);
-				toggleLoadList[4].SetActive(true);
-				slotExists = true;
-				break;
 			default:
 				break;
 			}
@@ -121,21 +111,19 @@ public class StartUIController : MonoBehaviour
 			}
 		}
 
-		MemoryManager.instance.characterToSaveLoad = characterToSaveLoad;
+		MemoryManager.instance.allGameDataOnSingleton.dungeonData.characterToSaveLoad = characterToSaveLoad;
 		MemoryManager.instance.Save();
 		SceneController.instance.LoadScene("Creation");
 	}
 
 	//After player selects Load Character and now selects a specific slot to load
-	//Though this function has almost the same functionality as OnSaveSlotSelection(), I want to get advice
-	//on which function's logic is more efficient (and if that even matters in this case).
 	//NOTE: Load options are NOT error-checked here or in the Load() function. They are gated by UI load slots being defaulted to inactive and set active in 
 	//the DirectorySearch() function above
 	public void onLoadSlotSelection(string loadSlotSelection)
 	{
 		characterToSaveLoad = "/" + loadSlotSelection; //Adding forward-slash to the string to keep with filename requirements
-		MemoryManager.instance.characterToSaveLoad = characterToSaveLoad; //Saving to MemoryManager singleton
-		MemoryManager.instance.characterToSaveLoad = characterToSaveLoad; //Necessary to call before Character Sheet load or all data.values will be blank
+		MemoryManager.instance.allGameDataOnSingleton.dungeonData.characterToSaveLoad = characterToSaveLoad; //Saving to MemoryManager singleton
+		MemoryManager.instance.allGameDataOnSingleton.dungeonData.characterToSaveLoad = characterToSaveLoad; //Necessary to call before Character Sheet load or all data.values will be blank
 		SceneController.instance.LoadScene("Game");
 	}
 }

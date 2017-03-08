@@ -41,7 +41,7 @@ public class MemoryManager : MonoBehaviour
 	{
 		//Use a binary formatter to write
 		BinaryFormatter bf = new BinaryFormatter();
-		FileStream file = File.Create(Application.persistentDataPath + "/DungeonGenerator" + "-" + allGameDataOnSingleton.dungeonData.gameVersion + ".dat");
+		FileStream file = File.Create(Application.persistentDataPath + "/dungeongenerator" + "-" + allGameDataOnSingleton.dungeonData.gameVersion + ".dat");
 
 		//Write data from singleton to memory
 		AllGameData allGameDataToMemory = allGameDataOnSingleton;
@@ -55,11 +55,11 @@ public class MemoryManager : MonoBehaviour
 
 	public void Load()
 	{
-		if (File.Exists(Application.persistentDataPath + "/DungeonGenerator" + "-" + allGameDataOnSingleton.dungeonData.gameVersion + ".dat")) 
+		if (File.Exists(Application.persistentDataPath + "/dungeongenerator" + "-" + allGameDataOnSingleton.dungeonData.gameVersion + ".dat")) 
 		{
 			//Use binary formatter to read
 			BinaryFormatter bf = new BinaryFormatter();
-			FileStream file = File.Open(Application.persistentDataPath + "/DungeonGenerator" + "-" + allGameDataOnSingleton.dungeonData.gameVersion + ".dat", FileMode.Open);
+			FileStream file = File.Open(Application.persistentDataPath + "/dungeongenerator" + "-" + allGameDataOnSingleton.dungeonData.gameVersion + ".dat", FileMode.Open);
 
 			//Deserialize data from memory
 			AllGameData allGameDataFromMemory = (AllGameData)bf.Deserialize(file);
