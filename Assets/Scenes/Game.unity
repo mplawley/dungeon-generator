@@ -333,7 +333,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 414e2aca445184c30b52c0931010c8e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  life: 5
   maxLife: 5
   playerHearts:
   - {fileID: 505558330}
@@ -1011,6 +1010,48 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 949461732}
+--- !u!1001 &1054434579
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4694364367926372, guid: 17b052122cfb44a2087bccafd65c1849, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -3.3571732
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694364367926372, guid: 17b052122cfb44a2087bccafd65c1849, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 3.2036438
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694364367926372, guid: 17b052122cfb44a2087bccafd65c1849, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694364367926372, guid: 17b052122cfb44a2087bccafd65c1849, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694364367926372, guid: 17b052122cfb44a2087bccafd65c1849, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694364367926372, guid: 17b052122cfb44a2087bccafd65c1849, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694364367926372, guid: 17b052122cfb44a2087bccafd65c1849, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694364367926372, guid: 17b052122cfb44a2087bccafd65c1849, type: 2}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 17b052122cfb44a2087bccafd65c1849, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &1135323499
 GameObject:
   m_ObjectHideFlags: 0
@@ -1393,7 +1434,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0.24617302, y: 1}
-  m_AnchoredPosition: {x: 0.3000002, y: -0.5}
+  m_AnchoredPosition: {x: 0.30000305, y: -0.5}
   m_SizeDelta: {x: -0.5, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1767352324
