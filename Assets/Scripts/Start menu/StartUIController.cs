@@ -62,7 +62,13 @@ public class StartUIController : MonoBehaviour
 	//Directory search for all character files, activating UI elements to let player know which character profiles can be loaded or saved without overwriting
 	public void DirectorySearch()
 	{
-		DirectoryInfo dir = new DirectoryInfo(Application.persistentDataPath + "/dungeongenerator" + "-" + MemoryManager.instance.allGameDataOnSingleton.dungeonData.gameVersion + ".dat");
+		//Check if directory exists. If not, create it....
+		if (!Directory.Exists(Application.persistentDataPath + "/" + MemoryManager.instance.allGameDataOnSingleton.dungeonData.gameVersion))
+		{
+			Directory.CreateDirectory(Application.persistentDataPath + "/" + MemoryManager.instance.allGameDataOnSingleton.dungeonData.gameVersion);
+		}
+
+		DirectoryInfo dir = new DirectoryInfo(Application.persistentDataPath + "/" + MemoryManager.instance.allGameDataOnSingleton.dungeonData.gameVersion);
 		FileInfo[] info = dir.GetFiles("*.*"); //Get all files in directory--that is, any that end with a dot, which is all of them
 
 		//Prepare to display saved/loaded slots to the player

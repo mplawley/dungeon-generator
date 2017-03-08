@@ -39,9 +39,15 @@ public class MemoryManager : MonoBehaviour
 
 	public void Save()
 	{
+		//Check if directory exists. If not, create it....
+		if (!Directory.Exists(Application.persistentDataPath + "/" + MemoryManager.instance.allGameDataOnSingleton.dungeonData.gameVersion))
+		{
+			Directory.CreateDirectory(Application.persistentDataPath + "/" + MemoryManager.instance.allGameDataOnSingleton.dungeonData.gameVersion);
+		}
+
 		//Use a binary formatter to write
 		BinaryFormatter bf = new BinaryFormatter();
-		FileStream file = File.Create(Application.persistentDataPath + "/dungeongenerator" + "-" + allGameDataOnSingleton.dungeonData.gameVersion + ".dat");
+		FileStream file = File.Create(Application.persistentDataPath + "/" + MemoryManager.instance.allGameDataOnSingleton.dungeonData.gameVersion + MemoryManager.instance.allGameDataOnSingleton.dungeonData.characterToSaveLoad + ".dat");
 
 		//Write data from singleton to memory
 		AllGameData allGameDataToMemory = allGameDataOnSingleton;
@@ -55,11 +61,11 @@ public class MemoryManager : MonoBehaviour
 
 	public void Load()
 	{
-		if (File.Exists(Application.persistentDataPath + "/dungeongenerator" + "-" + allGameDataOnSingleton.dungeonData.gameVersion + ".dat")) 
+		if (File.Exists(Application.persistentDataPath + "/" + MemoryManager.instance.allGameDataOnSingleton.dungeonData.gameVersion + MemoryManager.instance.allGameDataOnSingleton.dungeonData.characterToSaveLoad + ".dat"))
 		{
 			//Use binary formatter to read
 			BinaryFormatter bf = new BinaryFormatter();
-			FileStream file = File.Open(Application.persistentDataPath + "/dungeongenerator" + "-" + allGameDataOnSingleton.dungeonData.gameVersion + ".dat", FileMode.Open);
+			FileStream file = File.Open(Application.persistentDataPath + "/" + MemoryManager.instance.allGameDataOnSingleton.dungeonData.gameVersion + MemoryManager.instance.allGameDataOnSingleton.dungeonData.characterToSaveLoad + ".dat", FileMode.Open);
 
 			//Deserialize data from memory
 			AllGameData allGameDataFromMemory = (AllGameData)bf.Deserialize(file);
@@ -69,6 +75,10 @@ public class MemoryManager : MonoBehaviour
 
 			//Write data from memory to singleton
 			allGameDataOnSingleton = allGameDataFromMemory;
+		}
+		else
+		{
+			Debug.LogError("File does not exist.");
 		}
 	}
 
@@ -96,6 +106,7 @@ public class DungeonGeneratorData
 	public string gameVersion = "1.00";
 
 	//Player
+	public string playerName = "";
 	public int playerLife;
 	public int playerSpeed;
 	public int playerStrength;
@@ -107,6 +118,7 @@ public class DungeonGeneratorData
 	//Class methods
 	public void ClearData()
 	{
+		playerName = "";
 		playerLife = 0;
 		playerSpeed = 0;
 		playerStrength = 0;
