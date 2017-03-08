@@ -51,6 +51,9 @@ public class PlayerLife : MonoBehaviour
 			life = maxLife;
 		}
 
+		//Write to singleton
+		MemoryManager.instance.allGameDataOnSingleton.dungeonData.playerLife = life;
+
 		//Set hearts display..
 		SetPlayerHearts();
 
