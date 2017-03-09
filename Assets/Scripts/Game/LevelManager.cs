@@ -1,9 +1,4 @@
-﻿/*
- * This script generates the dungeon as a 2D array of ints.
- * 0 is solid stone.
- * 1 is a normal room.
- */
-
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,71 +6,182 @@ using Random = UnityEngine.Random;
 
 public class LevelManager : MonoBehaviour
 {
-	[Header("Procedural generation fields")]
-	int dungeonWidth = 10;
-	int dungeonHeight = 10;
-	int maxRooms;
-	int maxCorridors;
-	int maxRoomWidth = 16;
-	int maxRoomHeight = 8;
+	public enum Compass {North, East, South, West};
 
-	[Header("General terrain")]
+	[Header("Overall architecture")]
 	[SerializeField]
-	List<GameObject> generalRoomPrefabs = new List<GameObject>();
+	int DungeonWidthInRooms;
 
 	[SerializeField]
-	List<GameObject> specialRoomPrefabs = new List<GameObject>();
+	int DungeonHeightInRooms;
 
 	[SerializeField]
-	List<GameObject> groundTiles = new List<GameObject>();
+	int minRoomsBetweenEnterAndExit;
+
+	[Header("Room specifications")]
+	[SerializeField]
+	int roomWidth;
 
 	[SerializeField]
-	List<GameObject> outerWalls = new List<GameObject>();
+	int roomHeight;
 
-	[SerializeField]
-	List<GameObject> trapTiles = new List<GameObject>();
+	[Header("Prefabs")]
+	public GameObject roomPrefab;
+	public GameObject juncturePrefab;
+	public GameObject solidWallPrefab;
 
-	[Header("Doors")]
-	List<GameObject> doorTiles = new List<GameObject>();
-
-
+	[Header("Housekeeping")]
+	public bool[,] connectedRoomsArray;
+	public GameObject[,] gameObjectArray;
+	public Transform architectureParent;
+	public Transform junctureParent;
+	public Transform solidWallParent;
 
 	// Use this for initialization
 	void Start()
 	{
-		//Place the first room....
-		PlaceFirstRoom();
+		//Bookkeeping for which rooms have hallway junctures connecting them...
+		connectedRoomsArray = new bool[DungeonHeightInRooms, DungeonWidthInRooms];
+		gameObjectArray = new GameObject[DungeonHeightInRooms,DungeonWidthInRooms];
+		InitializeConnectedRoomsArray();
 
-		//GenerateDungeon();
+		//Place rooms....
+		PlaceRooms ();
+
+		//Remove orphaned rooms
+		RemoveOrphanedRooms();
 	}
 
-	void PlaceFirstRoom()
+	void PlaceRooms()
 	{
-		//Generate the dungeon board as a 2D array....(Dimensions * 2) -1 ensures we will always have enough room for the entire dungeon
-		int maxDungeonWidth = (dungeonWidth * 2) - 1; 
-		int maxDungeonHeight = (dungeonHeight * 2) - 1;
-		int[,] dungeonArray2D = new int[maxDungeonHeight, maxDungeonWidth];
+		//Bookkeeping for perimeter rooms of the dungeon....
+		bool northernmost = false;
+		bool westernmost = false;
+		bool easternmost = false;
+		bool southernmost = false;
 
-		//Place the first room right in its middle...
-		dungeonArray2D[maxDungeonHeight/2, maxDungeonWidth/2] = 1;
-
-		//Output the dungeon
-
-		for (int i = 0; i < maxDungeonHeight; i++)
+		//Place rooms
+		for (int i = 0; i < DungeonHeightInRooms; i++)
 		{
-			for (int j = 0; j < maxDungeonWidth; j++)
+			for (int j = 0; j < DungeonWidthInRooms; j++)
 			{
-				Debug.Log(string.Format("{0} ", dungeonArray2D[i, j]));
+				//Check if this room is an outermost one in the dungeon....
+				//Reset bools
+				northernmost = false;
+				westernmost = false;
+				easternmost = false;
+				southernmost = false;
+
+				//Check bools
+				if (i == 0)
+				{
+					northernmost = true;
+				}
+				if (j == 0)
+				{
+					westernmost = true;
+				}
+				if (i == DungeonHeightInRooms - 1)
+				{
+					southernmost = true;
+				}
+				if (j == DungeonWidthInRooms - 1)
+				{
+					easternmost = true;
+				}
+
+				//Otherwise, this is an interior room. Generate junctures to other rooms....
+				Compass direction = (Compass)Random.Range(0,4);
+				GameObject juncture;
+
+				switch (direction)
+				{
+				case Compass.North:
+					if (!northernmost)
+					{
+						juncture = Instantiate(juncturePrefab, new Vector3(i * roomHeight - roomHeight/2, j * roomWidth, 0), Quaternion.identity) as GameObject;
+
+						//Set juncture parent transform...
+						juncture.transform.parent = junctureParent;
+
+						//Update
+						connectedRoomsArray[i-1, j] = true;
+					}
+					break;
+				case Compass.East:
+					if (!easternmost)
+					{
+						juncture = Instantiate(juncturePrefab, new Vector3(i * roomHeight, j * roomWidth + roomWidth/2, 0), Quaternion.Euler(0,0,90)) as GameObject;
+
+						//Set juncture parent transform...
+						juncture.transform.parent = junctureParent;
+
+						connectedRoomsArray[i, j+1] = true;
+					}
+					break;
+				case Compass.South:
+					if (!southernmost)
+					{
+						juncture = Instantiate(juncturePrefab, new Vector3(i * roomHeight + roomHeight/2, j * roomWidth, 0), Quaternion.identity) as GameObject;
+
+						//Set juncture parent transform...
+						juncture.transform.parent = junctureParent;
+
+						connectedRoomsArray[i+1, j] = true;
+					}
+					break;
+				case Compass.West:
+					if (!westernmost)
+					{
+						juncture = Instantiate(juncturePrefab, new Vector3(i * roomHeight, j * roomWidth - roomWidth/2, 0), Quaternion.Euler(0,0,90)) as GameObject;
+
+						//Set juncture parent transform...
+						juncture.transform.parent = junctureParent;
+
+						connectedRoomsArray[i, j-1] = true;
+					}
+					break;
+				default:
+					break;
+				}
+					
+				//Finally, place the room
+				GameObject room = Instantiate(roomPrefab, new Vector3(i * roomHeight, j * roomWidth, 0), Quaternion.identity) as GameObject;
+				room.transform.parent = architectureParent;
 			}
-			Debug.Log("\n" + "\n");
 		}
 	}
 
-	void GenerateDungeon()
+
+	//Initializes bookkeeping array for what rooms have hallway junctures
+	public void InitializeConnectedRoomsArray ()
 	{
-		for (int i = 0; i < maxRoomWidth; i++)
+		for (int i = 0; i < connectedRoomsArray.GetLength(0); i++)
 		{
-			//	
+			for (int j = 0; j < connectedRoomsArray.GetLength(1); j++)
+			{
+				connectedRoomsArray [i, j] = false;
+			}
+		}
+	}
+
+	//Cut out orphan rooms....
+	public void RemoveOrphanedRooms()
+	{
+		for (int i = 0; i < connectedRoomsArray.GetLength(0); i++)
+		{
+			for (int j = 0; j < connectedRoomsArray.GetLength (1); j++)
+			{
+				if (connectedRoomsArray [i, j] == false)
+				{
+					//TODO: FIX
+					//GameObject orphanedRoom = gameObjectArray [i, j];
+					//Destroy (orphanedRoom);
+
+					GameObject solidWall = Instantiate(solidWallPrefab, new Vector3(i * roomHeight - roomHeight, j * roomWidth, 0), Quaternion.identity) as GameObject;
+					solidWall.transform.parent = solidWallParent;
+				}
+			}
 		}
 	}
 }

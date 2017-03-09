@@ -9,11 +9,12 @@ using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
-	public Transform attackPosition;
-	public float attackRadius;
-	public int maxObjectsHit = 5;
-	public Collider2D[] objectsHit;
-	public LayerMask selectObjectsToHit;
+	//TODO: MAKE ATTACK FUNCTION ELEGANT...
+	//public Transform attackPosition;
+	//public float attackRadius;
+	//public int maxObjectsHit = 5;
+	//public Collider2D[] objectsHit;
+	//public LayerMask selectObjectsToHit;
 
 	[SerializeField]
 	GameObject swordLeft, swordUp, swordRight, swordDown;
@@ -27,7 +28,7 @@ public class PlayerAttack : MonoBehaviour
 
 	void Start()
 	{
-		objectsHit = new Collider2D[maxObjectsHit];
+		//objectsHit = new Collider2D[maxObjectsHit];
 		animator = gameObject.GetComponent<Animator>();
 		playerSpriteRenderer = gameObject.GetComponent<SpriteRenderer> ();
 	}
