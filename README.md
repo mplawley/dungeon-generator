@@ -17,4 +17,4 @@ https://www.dropbox.com/sh/ncqklf25un3q3zd/AABtxNUQRGIA1586fCGliLgYa?dl=0
 Then install your free copy of Unity 5, clone this repo, and begin by running the Start.unity scene. Click the play button and enjoy!
 
 #Unstable installation
-Head on over to my test server, moyoba.com, and see if the WebGL build worked!
+Head on over to my test server, moyoba.com, and play the WebGL build! Warning: the graphics will be degraded, and you'll need a laptop or desktop. Be sure to maximize the screen!
