@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+ * This script employs a matrix/2D Array approach to procedural dungeon generation
+ * TODO: add more room prefabs and unique tile prefabs for gameplay and visual variety!
+ */
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
