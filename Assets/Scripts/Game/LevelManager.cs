@@ -26,9 +26,11 @@ public class LevelManager : MonoBehaviour
 	int roomHeight;
 
 	[Header("Prefabs")]
+	public GameObject playerPrefab;
 	public GameObject roomPrefab;
 	public GameObject juncturePrefab;
 	public GameObject solidWallPrefab;
+	public GameObject dungeonHolder;
 
 	[Header("Housekeeping")]
 	public bool[,] connectedRoomsArray;
@@ -51,6 +53,9 @@ public class LevelManager : MonoBehaviour
 
 		//Remove orphaned rooms
 		RemoveOrphanedRooms();
+
+		//Place the Dungeon Holder beneath the Player so that he is centered....
+		PlaceDungeon();
 	}
 
 	void PlaceRooms()
@@ -191,5 +196,15 @@ public class LevelManager : MonoBehaviour
 				}
 			}
 		}
+	}
+
+	//Place player in the middle of the dungeon....
+	public void PlaceDungeon()
+	{
+		Vector3 adjustedDungeonPosition = new Vector3((float)(dungeonHolder.transform.position.x - DungeonColsInRooms/2 * roomWidth), 
+			(float)(dungeonHolder.transform.position.y - DungeonRowsInRooms/2 * roomHeight), 
+			0f);
+		
+		dungeonHolder.transform.position = adjustedDungeonPosition;
 	}
 }
