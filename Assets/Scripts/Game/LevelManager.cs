@@ -57,9 +57,12 @@ public class LevelManager : MonoBehaviour
 		//Bookkeeping for which rooms have hallway junctures connecting them...
 		connectedRoomsArray = new bool[DungeonColsInRooms, DungeonRowsInRooms];
 		gameObjectArray = new GameObject[DungeonColsInRooms,DungeonRowsInRooms];
-		roomsArray = new Room[DungeonColsInRooms*2, DungeonRowsInRooms*2]; //Used to see if we have a straight journey through the Matrix-dungeon
+		roomsArray = new Room[DungeonColsInRooms, DungeonRowsInRooms]; //Used to see if we have a straight journey through the Matrix-dungeon
+
 
 		InitializeConnectedRoomsArray();
+		InitializeMatrixPathfindingArray();
+		print (roomsArray[5, 5]);
 
 		//Place rooms....
 		PlaceRooms ();
@@ -93,7 +96,7 @@ public class LevelManager : MonoBehaviour
 				if (i == middleCol && j == middleRow)
 				{
 					//Set the first room to true
-					roomsArray[middleCol, middleRow].firstRoom = true;
+					//roomsArray[middleCol, middleRow].firstRoom = true;
 				}
 
 				//Check if this room is an outermost one in the dungeon....if it is, don't generate a junture to another part of the matrix....
@@ -138,8 +141,8 @@ public class LevelManager : MonoBehaviour
 						//Update connections
 						connectedRoomsArray[i, j] = true;
 						connectedRoomsArray[i-1, j] = true; //Room to the south must be connected
-						roomsArray[i, j].SetNorthDoor(true); //This room has a north door and...
-						roomsArray[i, j+1].SetSouthDoor(true); //The room up in the matrix must have a south door now...
+//						roomsArray[i, j].SetNorth = true; //This room has a north door and...
+//						roomsArray[i, j+1].SetSouth = true; //The room up in the matrix must have a south door now...
 					}
 					break;
 				case Compass.East:
@@ -153,8 +156,8 @@ public class LevelManager : MonoBehaviour
 						//Update connections
 						connectedRoomsArray[i, j] = true;
 						connectedRoomsArray[i, j+1] = true; //Room to the east must be connected
-						//roomsArray[i, j].SetEastDoor(true); //This room has an east door and...
-						roomsArray[i+1, j].SetWestDoor(true); //The room to the right in the matrix must have a west door now...
+//						roomsArray[i, j].SetEast = true; //This room has an east door and...
+//						roomsArray[i+1, j].SetWest = true; //The room to the right in the matrix must have a west door now...
 					}
 					break;
 				case Compass.South:
@@ -168,8 +171,8 @@ public class LevelManager : MonoBehaviour
 						//Update connections
 						connectedRoomsArray[i, j] = true;
 						connectedRoomsArray[i+1, j] = true; //room to the north must be connected
-						//roomsArray[i, j].SetSouthDoor(true); //This room has a south door and...
-						roomsArray[i, j-1].SetNorthDoor(true); //next room down in the matrix must have a north door....
+//						roomsArray[i, j].SetSouth = true; //This room has a south door and...
+//						roomsArray[i, j-1].SetNorth = true; //next room down in the matrix must have a north door....
 					}
 					break;
 				case Compass.West:
@@ -183,8 +186,8 @@ public class LevelManager : MonoBehaviour
 						//Update connections
 						connectedRoomsArray[i, j] = true;
 						connectedRoomsArray[i, j-1] = true; //Room to the west must be connected
-						roomsArray[i, j].SetWestDoor(true); //This room has a west door and...
-						roomsArray[i-1, j].SetEastDoor(true); //The room one to the left in the matrix must have an east door now....
+//						roomsArray[i, j].SetWest = true; //This room has a west door and...
+//						roomsArray[i-1, j].SetEast = true; //The room one to the left in the matrix must have an east door now....
 					}
 					break;
 				default:
@@ -208,6 +211,21 @@ public class LevelManager : MonoBehaviour
 			for (int j = 0; j < connectedRoomsArray.GetLength(1); j++)
 			{
 				connectedRoomsArray [i, j] = false;
+			}
+		}
+	}
+
+	//Initializes bookkeeping array for what rooms have hallway junctures
+	public void InitializeMatrixPathfindingArray ()
+	{
+		for (int i = 0; i < roomsArray.GetLength(0); i++)
+		{
+			for (int j = 0; j < roomsArray.GetLength(1); j++)
+			{
+//				roomsArray[i, j].SetNorth = false;
+//				roomsArray[i, j].SetSouth = false;
+//				roomsArray[i, j].SetWest = false;
+//				roomsArray[i, j].SetEast = false;
 			}
 		}
 	}
@@ -307,8 +325,8 @@ public class LevelManager : MonoBehaviour
 						//Update connections
 						connectedRoomsArray[currentCol, currentRow] = true;
 						connectedRoomsArray[currentCol-1, currentRow] = true; //Room to the south must be connected
-						roomsArray[currentCol, currentRow].SetNorthDoor(true); //This room has a north door and...
-						roomsArray[currentCol, currentRow+1].SetSouthDoor(true); //The room up in the matrix must have a south door now...
+						roomsArray[currentCol, currentRow].SetNorth = true; //This room has a north door and...
+						roomsArray[currentCol, currentRow+1].SetSouth = true; //The room up in the matrix must have a south door now...
 						
 						break;
 					case Compass.East:
@@ -321,8 +339,8 @@ public class LevelManager : MonoBehaviour
 						//Update connections
 						connectedRoomsArray[currentCol, currentRow] = true;
 						connectedRoomsArray[currentCol, currentRow+1] = true; //Room to the east must be connected
-						roomsArray[currentCol, currentRow].SetEastDoor(true); //This room has an east door and...
-						roomsArray[currentCol+1, currentRow].SetWestDoor(true); //The room to the right in the matrix must have a west door now...
+						roomsArray[currentCol, currentRow].SetEast = true; //This room has an east door and...
+						roomsArray[currentCol+1, currentRow].SetWest = true; //The room to the right in the matrix must have a west door now...
 						
 						break;
 					case Compass.South:
@@ -335,8 +353,8 @@ public class LevelManager : MonoBehaviour
 						//Update connections
 						connectedRoomsArray[currentCol, currentRow] = true;
 						connectedRoomsArray[currentCol+1, currentRow] = true; //room to the north must be connected
-						roomsArray[currentCol, currentRow].SetSouthDoor(true); //This room has a south door and...
-						roomsArray[currentCol, currentRow-1].SetNorthDoor(true); //next room down in the matrix must have a north door....
+						roomsArray[currentCol, currentRow].SetSouth = true; //This room has a south door and...
+						roomsArray[currentCol, currentRow-1].SetNorth = true; //next room down in the matrix must have a north door....
 
 						break;
 					case Compass.West:
@@ -349,8 +367,8 @@ public class LevelManager : MonoBehaviour
 						//Update connections
 						connectedRoomsArray[currentCol, currentRow] = true;
 						connectedRoomsArray[currentCol, currentRow-1] = true; //Room to the west must be connected
-						roomsArray[currentCol, currentRow].SetWestDoor(true); //This room has a west door and...
-						roomsArray[currentCol-1, currentRow].SetEastDoor(true); //The room one to the left in the matrix must have an east door now....
+						roomsArray[currentCol, currentRow].SetWest = true; //This room has a west door and...
+						roomsArray[currentCol-1, currentRow].SetEast = true; //The room one to the left in the matrix must have an east door now....
 						
 						break;
 					default:

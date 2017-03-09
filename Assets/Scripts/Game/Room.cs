@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-[Serializable]
 public class Room //DOES NOT inherit from MonoBehaviour
 {
 	public bool northDoor = false;
@@ -13,6 +9,54 @@ public class Room //DOES NOT inherit from MonoBehaviour
 
 	public bool firstRoom = false;
 	public bool partOfAContinuousJourney = false;
+
+	public bool SetNorth
+	{
+		get 
+		{
+			return northDoor;
+		}
+		set 
+		{
+			northDoor = value;
+		}
+	}
+
+	public bool SetSouth
+	{
+		get 
+		{
+			return southDoor;
+		}
+		set 
+		{
+			southDoor = value;
+		}
+	}
+
+	public bool SetWest
+	{
+		get 
+		{
+			return westDoor;
+		}
+		set 
+		{
+			westDoor = value;
+		}
+	}
+
+	public bool SetEast
+	{
+		get 
+		{
+			return eastDoor;
+		}
+		set 
+		{
+			eastDoor = value;
+		}
+	}
 
 	public void SetBooleans(bool northDoorStatus, bool southDoorStatus, bool westDoorStatus, bool eastDoorStatus, bool partOfAContinuousJourneyStatus, bool firstRoomStatus)
 	{
@@ -26,25 +70,4 @@ public class Room //DOES NOT inherit from MonoBehaviour
 		firstRoom = firstRoomStatus;
 		partOfAContinuousJourney = partOfAContinuousJourneyStatus; //TODO
 	}
-
-	public void SetNorthDoor(bool northDoorStatus)
-	{
-		northDoor = northDoorStatus;
-	}
-
-	public void SetSouthDoor(bool southDoorStatus)
-	{
-		southDoor = southDoorStatus;
-	}
-
-	public void SetWestDoor(bool westDoorStatus)
-	{
-		westDoor = westDoorStatus;
-	}
-
-	public void SetEastDoor(bool eastDoorStatus)
-	{
-		eastDoor = eastDoorStatus;
-	}
-
 }
