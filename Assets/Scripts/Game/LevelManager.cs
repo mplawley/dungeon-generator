@@ -104,8 +104,9 @@ public class LevelManager : MonoBehaviour
 						//Set juncture parent transform...
 						juncture.transform.parent = junctureParent;
 
-						//Update
-						connectedRoomsArray[i-1, j] = true;
+						//Update connections
+						connectedRoomsArray[i, j] = true;
+						connectedRoomsArray[i-1, j] = true; //Room to the south must be connected
 					}
 					break;
 				case Compass.East:
@@ -116,7 +117,9 @@ public class LevelManager : MonoBehaviour
 						//Set juncture parent transform...
 						juncture.transform.parent = junctureParent;
 
-						connectedRoomsArray[i, j+1] = true;
+						//Update connections
+						connectedRoomsArray[i, j] = true;
+						connectedRoomsArray[i, j+1] = true; //Room to the east must be connected
 					}
 					break;
 				case Compass.South:
@@ -127,7 +130,9 @@ public class LevelManager : MonoBehaviour
 						//Set juncture parent transform...
 						juncture.transform.parent = junctureParent;
 
-						connectedRoomsArray[i+1, j] = true;
+						//Update connections
+						connectedRoomsArray[i, j] = true;
+						connectedRoomsArray[i+1, j] = true; //room to the north must be connected
 					}
 					break;
 				case Compass.West:
@@ -138,7 +143,9 @@ public class LevelManager : MonoBehaviour
 						//Set juncture parent transform...
 						juncture.transform.parent = junctureParent;
 
-						connectedRoomsArray[i, j-1] = true;
+						//Update connections
+						connectedRoomsArray[i, j] = true;
+						connectedRoomsArray[i, j-1] = true; //Room to the west must be connected
 					}
 					break;
 				default:
@@ -178,7 +185,7 @@ public class LevelManager : MonoBehaviour
 					//GameObject orphanedRoom = gameObjectArray [i, j];
 					//Destroy (orphanedRoom);
 
-					GameObject solidWall = Instantiate(solidWallPrefab, new Vector3(i * roomHeight - roomHeight, j * roomWidth, 0), Quaternion.identity) as GameObject;
+					GameObject solidWall = Instantiate(solidWallPrefab, new Vector3(i * roomWidth, j * roomHeight, 0), Quaternion.identity) as GameObject;
 					solidWall.transform.parent = solidWallParent;
 				}
 			}
