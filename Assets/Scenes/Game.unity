@@ -449,6 +449,26 @@ Prefab:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114762663988890430, guid: 360ffd40ec0cb4866a9635cba5764337,
+        type: 2}
+      propertyPath: boundary.xMin
+      value: -7
+      objectReference: {fileID: 0}
+    - target: {fileID: 114762663988890430, guid: 360ffd40ec0cb4866a9635cba5764337,
+        type: 2}
+      propertyPath: boundary.xMax
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 114762663988890430, guid: 360ffd40ec0cb4866a9635cba5764337,
+        type: 2}
+      propertyPath: boundary.yMin
+      value: -7
+      objectReference: {fileID: 0}
+    - target: {fileID: 114762663988890430, guid: 360ffd40ec0cb4866a9635cba5764337,
+        type: 2}
+      propertyPath: boundary.yMax
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 360ffd40ec0cb4866a9635cba5764337, type: 2}
   m_IsPrefabParent: 0
@@ -588,6 +608,27 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1135323499}
+--- !u!1 &1314776140 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1259277945969220, guid: 360ffd40ec0cb4866a9635cba5764337,
+    type: 2}
+  m_PrefabInternal: {fileID: 909177855}
+--- !u!114 &1314776149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1314776140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da339b8986ad04397b213eb828ef9e29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dungeonHolder: {fileID: 1940147692}
+  transitionVectorLeft: {x: -10, y: 0, z: 0}
+  transitionVectorRight: {x: 10, y: 0, z: 0}
+  transitionVectorUp: {x: 0, y: 10, z: 0}
+  transitionVectorDown: {x: 0, y: -10, z: 0}
 --- !u!1 &1508618357
 GameObject:
   m_ObjectHideFlags: 0

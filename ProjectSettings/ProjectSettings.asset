@@ -462,6 +462,6 @@ PlayerSettings:
   cloudServicesEnabled:
     UNet: 1
   cloudProjectId: 861f2054-f12f-48f4-9b56-73c72e64687c
-  projectName: dungeongenerator (1)
+  projectName: dungeon-generator
   organizationId: mark-lawley
   cloudEnabled: 0
