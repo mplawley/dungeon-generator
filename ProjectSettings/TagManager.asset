@@ -9,6 +9,8 @@ TagManager:
   - Trap
   - Wall
   - Door
+  - Fire
+  - Exit
   layers:
   - Default
   - TransparentFX
