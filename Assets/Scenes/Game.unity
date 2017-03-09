@@ -458,8 +458,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec8c0f6c1e324c5389dd6936f58c968, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DungeonRowsInRooms: 14
-  DungeonColsInRooms: 14
+  DungeonRowsInRooms: 10
+  DungeonColsInRooms: 10
   minRoomsBetweenEnterAndExit: 6
   roomWidth: 14
   roomHeight: 14
@@ -471,6 +471,7 @@ MonoBehaviour:
   solidWallPrefab: {fileID: 1134062788890720, guid: 12480d111e63c4626a0d56f681869a81,
     type: 2}
   dungeonHolder: {fileID: 1940147691}
+  exitPrefab: {fileID: 1102680625574578, guid: 1ef7e2f6dfbad47f9a0909fb18b6793c, type: 2}
   roomPrefabs:
   - {fileID: 1015906441894126, guid: cee22591ad4e5457ca34a04b462ceb1e, type: 2}
   - {fileID: 1513383515259664, guid: 072bd2b69dc6d4e088fedeb069b74e3c, type: 2}
@@ -945,9 +946,9 @@ MonoBehaviour:
   playerFacing: 0
   speed: 5
   boundary:
-    xMin: -7
+    xMin: -6.1
     xMax: 7
-    yMin: -7
+    yMin: -6.1
     yMax: 7
 --- !u!212 &1314776148
 SpriteRenderer:
