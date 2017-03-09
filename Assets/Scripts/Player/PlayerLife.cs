@@ -41,6 +41,17 @@ public class PlayerLife : MonoBehaviour
 
 	public void ModifierPlayerLife(int howMuch)
 	{
+		//Play sound
+		if (howMuch < 0)
+		{
+			SoundManager.instance.PlaySound("Lost life");
+		}
+		else if (howMuch > 0)
+		{
+			SoundManager.instance.PlaySound("Got life");
+		}
+
+		//Memory
 		int life = MemoryManager.instance.allGameDataOnSingleton.dungeonData.playerLife;
 
 		life += howMuch;

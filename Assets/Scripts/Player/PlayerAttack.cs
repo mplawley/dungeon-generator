@@ -37,6 +37,7 @@ public class PlayerAttack : MonoBehaviour
 	{
 		if(Input.GetMouseButtonDown (0) || Input.GetKeyDown("space"))
 		{
+			SoundManager.instance.PlaySound("Strike");
 			//Get facing and turn on sword state...
 			if(PlayerMotionController.instance.playerFacing == facing.left)
 			{
