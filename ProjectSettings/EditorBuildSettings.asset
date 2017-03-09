@@ -13,3 +13,5 @@ EditorBuildSettings:
     path: Assets/Scenes/Creation.unity
   - enabled: 1
     path: Assets/Scenes/Death.unity
+  - enabled: 1
+    path: Assets/Scenes/Win.unity
