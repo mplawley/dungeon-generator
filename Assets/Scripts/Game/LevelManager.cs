@@ -36,6 +36,7 @@ public class LevelManager : MonoBehaviour
 	public Transform architectureParent;
 	public Transform junctureParent;
 	public Transform solidWallParent;
+	public float architectureOffset; //For visual pleasure of placement
 
 	// Use this for initialization
 	void Start()
@@ -99,7 +100,7 @@ public class LevelManager : MonoBehaviour
 				case Compass.North:
 					if (!northernmost)
 					{
-						juncture = Instantiate(juncturePrefab, new Vector3(i * roomHeight - roomHeight/2, j * roomWidth, 0), Quaternion.identity) as GameObject;
+						juncture = Instantiate(juncturePrefab, new Vector3(i * roomHeight - roomHeight/2 + architectureOffset, j * roomWidth, 0), Quaternion.identity) as GameObject;
 
 						//Set juncture parent transform...
 						juncture.transform.parent = junctureParent;
@@ -112,7 +113,7 @@ public class LevelManager : MonoBehaviour
 				case Compass.East:
 					if (!easternmost)
 					{
-						juncture = Instantiate(juncturePrefab, new Vector3(i * roomHeight, j * roomWidth + roomWidth/2, 0), Quaternion.Euler(0,0,90)) as GameObject;
+						juncture = Instantiate(juncturePrefab, new Vector3(i * roomHeight, j * roomWidth + roomWidth/2 + architectureOffset, 0), Quaternion.Euler(0,0,90)) as GameObject;
 
 						//Set juncture parent transform...
 						juncture.transform.parent = junctureParent;
@@ -125,7 +126,7 @@ public class LevelManager : MonoBehaviour
 				case Compass.South:
 					if (!southernmost)
 					{
-						juncture = Instantiate(juncturePrefab, new Vector3(i * roomHeight + roomHeight/2, j * roomWidth, 0), Quaternion.identity) as GameObject;
+						juncture = Instantiate(juncturePrefab, new Vector3(i * roomHeight + roomHeight/2 + architectureOffset, j * roomWidth, 0), Quaternion.identity) as GameObject;
 
 						//Set juncture parent transform...
 						juncture.transform.parent = junctureParent;
@@ -138,7 +139,7 @@ public class LevelManager : MonoBehaviour
 				case Compass.West:
 					if (!westernmost)
 					{
-						juncture = Instantiate(juncturePrefab, new Vector3(i * roomHeight, j * roomWidth - roomWidth/2, 0), Quaternion.Euler(0,0,90)) as GameObject;
+						juncture = Instantiate(juncturePrefab, new Vector3(i * roomHeight, j * roomWidth - roomWidth/2 + architectureOffset, 0), Quaternion.Euler(0,0,90)) as GameObject;
 
 						//Set juncture parent transform...
 						juncture.transform.parent = junctureParent;

@@ -609,6 +609,7 @@ MonoBehaviour:
   architectureParent: {fileID: 1508618358}
   junctureParent: {fileID: 1722098164}
   solidWallParent: {fileID: 244539772}
+  architectureOffset: -3
 --- !u!1 &656813586
 GameObject:
   m_ObjectHideFlags: 0
