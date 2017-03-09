@@ -230,8 +230,8 @@ MonoBehaviour:
   DungeonRowsInRooms: 10
   DungeonColsInRooms: 10
   minRoomsBetweenEnterAndExit: 6
-  roomWidth: 25
-  roomHeight: 25
+  roomWidth: 14
+  roomHeight: 14
   playerPrefab: {fileID: 1102253268381146, guid: 360ffd40ec0cb4866a9635cba5764337,
     type: 2}
   roomPrefab: {fileID: 1015906441894126, guid: cee22591ad4e5457ca34a04b462ceb1e, type: 2}
@@ -625,10 +625,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dungeonHolder: {fileID: 1940147692}
-  transitionVectorLeft: {x: -10, y: 0, z: 0}
-  transitionVectorRight: {x: 10, y: 0, z: 0}
-  transitionVectorUp: {x: 0, y: 10, z: 0}
-  transitionVectorDown: {x: 0, y: -10, z: 0}
+  transitionVectorLeft: {x: -7, y: 0, z: 0}
+  transitionVectorRight: {x: 7, y: 0, z: 0}
+  transitionVectorUp: {x: 0, y: 7, z: 0}
+  transitionVectorDown: {x: 0, y: -7, z: 0}
+  playerSouthPosition: {x: 0, y: 0, z: 0}
+  playerWestPosition: {x: 0, y: 0, z: 0}
+  playerEastPosition: {x: 0, y: 0, z: 0}
+  playerNorthPosition: {x: 0, y: 0, z: 0}
+  transitionSpeed: 5
+  touchedDoor: 0
 --- !u!1 &1508618357
 GameObject:
   m_ObjectHideFlags: 0

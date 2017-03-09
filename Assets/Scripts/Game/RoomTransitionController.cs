@@ -15,33 +15,68 @@ public class RoomTransitionController : MonoBehaviour
 	public Vector3 transitionVectorUp;
 	public Vector3 transitionVectorDown;
 
-	bool touchedDoor = false;
+	public Vector3 playerSouthPosition = new Vector3();
+	public Vector3 playerWestPosition;
+	public Vector3 playerEastPosition;
+	public Vector3 playerNorthPosition;
+	Vector3 newDungeonPosition;
+
+	private float step;
+	public float transitionSpeed;
+
+	public bool touchedDoor = false;
 	
 	// Update is called once per frame
-	void Update()
+	void FixedUpdate()
 	{
 		if (touchedDoor)
 		{
 			if (PlayerMotionController.instance.playerFacing == facing.up)
 			{
-				print("Facing up");
-				dungeonHolder.transform.position += (gameObject.transform.position - transitionVectorUp) * 10 * Time.deltaTime;
+				//Move dungeon....
+				newDungeonPosition = dungeonHolder.position - transitionVectorUp;
+				step = transitionSpeed * Time.deltaTime;
+				dungeonHolder.position = Vector3.MoveTowards(dungeonHolder.position, newDungeonPosition, step);
+
+				//Put player at bottom of room....
+				playerSouthPosition = new Vector3(PlayerMotionController.instance.boundary.yMin, gameObject.transform.position.y, 0f);
+				gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, playerSouthPosition, step);
+
 			}
 			else if (PlayerMotionController.instance.playerFacing == facing.right)
 			{
-				print("Facing right");
-				dungeonHolder.transform.position += (gameObject.transform.position - transitionVectorRight) * 10 * Time.deltaTime;
+				//Move dungeon....
+				newDungeonPosition = dungeonHolder.position - transitionVectorRight;
+				step = transitionSpeed * Time.deltaTime;
+				dungeonHolder.position = Vector3.MoveTowards(dungeonHolder.position, newDungeonPosition, step);
+
+				//Put player at left of room....
+				playerWestPosition = new Vector3(PlayerMotionController.instance.boundary.xMin, gameObject.transform.position.y, 0f);
+				gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, playerWestPosition, step);
 			}
 			else if (PlayerMotionController.instance.playerFacing == facing.down)
 			{
-				print("Facing down");
-				dungeonHolder.transform.position += (gameObject.transform.position - transitionVectorDown) * 10 * Time.deltaTime;
+				//Move dungeon....
+				newDungeonPosition = dungeonHolder.position - transitionVectorDown;
+				step = transitionSpeed * Time.deltaTime;
+				dungeonHolder.position = Vector3.MoveTowards(dungeonHolder.position, newDungeonPosition, step);
+
+				//Put player at top of room....
+				playerWestPosition = new Vector3(gameObject.transform.position.x, PlayerMotionController.instance.boundary.yMax, 0f);
+				gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, playerWestPosition, step);
 			}
 			else if (PlayerMotionController.instance.playerFacing == facing.left)
 			{
-				print("Facing left");
-				dungeonHolder.transform.position += (gameObject.transform.position - transitionVectorLeft) * 10 * Time.deltaTime;
+				//Move dungeon....
+				newDungeonPosition = dungeonHolder.position - transitionVectorLeft;
+				step = transitionSpeed * Time.deltaTime;
+				dungeonHolder.position = Vector3.MoveTowards(dungeonHolder.position, newDungeonPosition, step);
+
+				//Put player at right of room....
+				playerWestPosition = new Vector3(PlayerMotionController.instance.boundary.xMax, gameObject.transform.position.y, 0f);
+				gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, playerWestPosition, step);
 			}
+			Invoke("GrantPlayerMovement", 5.0f);
 		}
 	}
 
@@ -56,5 +91,6 @@ public class RoomTransitionController : MonoBehaviour
 	public void GrantPlayerMovement()
 	{
 		gameObject.GetComponent<PlayerMotionController>().enabled = true;
+		touchedDoor = false;
 	}
 }
