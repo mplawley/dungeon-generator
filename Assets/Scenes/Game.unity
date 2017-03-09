@@ -118,7 +118,7 @@ Transform:
   m_Children:
   - {fileID: 349423308}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &91606200
 GameObject:
@@ -562,7 +562,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &629835031
 MonoBehaviour:
@@ -719,7 +719,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &767371995
 GameObject:
@@ -975,7 +975,7 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1135323499}
---- !u!1001 &1331852898
+--- !u!1001 &1347796276
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -984,11 +984,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4181904179866312, guid: 2cfe4d6e29b96466fa5926a4e92fedcd, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 0.03
+      value: -0.02938503
       objectReference: {fileID: 0}
     - target: {fileID: 4181904179866312, guid: 2cfe4d6e29b96466fa5926a4e92fedcd, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -0.01
+      value: -0.013926029
       objectReference: {fileID: 0}
     - target: {fileID: 4181904179866312, guid: 2cfe4d6e29b96466fa5926a4e92fedcd, type: 2}
       propertyPath: m_LocalPosition.z
@@ -1012,23 +1012,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4181904179866312, guid: 2cfe4d6e29b96466fa5926a4e92fedcd, type: 2}
       propertyPath: m_RootOrder
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 4181904179866312, guid: 2cfe4d6e29b96466fa5926a4e92fedcd, type: 2}
-      propertyPath: m_LocalScale.x
-      value: 1.7734793
-      objectReference: {fileID: 0}
-    - target: {fileID: 4181904179866312, guid: 2cfe4d6e29b96466fa5926a4e92fedcd, type: 2}
-      propertyPath: m_LocalScale.z
-      value: 0.21686496
-      objectReference: {fileID: 0}
-    - target: {fileID: 4181904179866312, guid: 2cfe4d6e29b96466fa5926a4e92fedcd, type: 2}
-      propertyPath: m_LocalScale.y
-      value: 1.0000001
-      objectReference: {fileID: 0}
-    - target: {fileID: 1229483034335326, guid: 2cfe4d6e29b96466fa5926a4e92fedcd, type: 2}
-      propertyPath: m_Name
-      value: Plain corridor brick
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 64504372353823684, guid: 2cfe4d6e29b96466fa5926a4e92fedcd, type: 2}
@@ -1187,7 +1171,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1536387495
 GameObject:
@@ -1417,7 +1401,7 @@ RectTransform:
   m_Children:
   - {fileID: 909133563}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

@@ -7,6 +7,8 @@ TagManager:
   - Sword
   - Monster manager
   - Trap
+  - Wall
+  - Door
   layers:
   - Default
   - TransparentFX
@@ -17,7 +19,7 @@ TagManager:
   - 
   - 
   - Traps
-  - 
+  - Blocking
   - 
   - 
   - 
