@@ -36,6 +36,7 @@ public class LevelManager : MonoBehaviour
 	public GameObject juncturePrefab;
 	public GameObject solidWallPrefab;
 	public GameObject dungeonHolder;
+	public List<GameObject> roomPrefabs = new List<GameObject>();
 
 	[Header("Housekeeping")]
 	public bool[,] connectedRoomsArray;
@@ -164,7 +165,8 @@ public class LevelManager : MonoBehaviour
 				}
 					
 				//Finally, place the room
-				GameObject room = Instantiate(roomPrefab, new Vector3(i * roomHeight, j * roomWidth, 0), Quaternion.identity) as GameObject;
+				int randomRoomNum = Random.Range(0, roomPrefabs.Count);
+				GameObject room = Instantiate(roomPrefabs[randomRoomNum], new Vector3(i * roomHeight, j * roomWidth, 0), Quaternion.identity) as GameObject;
 				room.transform.parent = architectureParent;
 			}
 		}
