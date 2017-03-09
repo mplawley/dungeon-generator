@@ -24,32 +24,35 @@ public class MonsterLifeController : MonoBehaviour
 	{
 		if(other.gameObject.tag == "Sword")
 		{
+			//Death?
 			if(monsterLife <= 0)
 			{
 				Destroy (parentMonsterObject);
 			}
 
-			monsterLife -= 1;
+			//Damage
+			int playerStrength = MemoryManager.instance.allGameDataOnSingleton.dungeonData.playerStrength;
+			monsterLife -= playerStrength;
 
 			//Push monster back from the strike
 			if (PlayerMotionController.instance.playerFacing == facing.left)
 			{
-				rb.AddForce(gameObject.transform.right * -pushBackForce * 100);
+				rb.AddForce(gameObject.transform.right * -pushBackForce * 100 * playerStrength);
 			}
 			//Push to the left
 			else if (PlayerMotionController.instance.playerFacing == facing.right)
 			{
-				rb.AddForce(gameObject.transform.right * pushBackForce * 100);
+				rb.AddForce(gameObject.transform.right * pushBackForce * 100 * playerStrength);
 			}
 			//Push up
 			if (PlayerMotionController.instance.playerFacing == facing.up)
 			{
-				rb.AddForce(gameObject.transform.up * pushBackForce * 100);
+				rb.AddForce(gameObject.transform.up * pushBackForce * 100 * playerStrength);
 			}
 			//Push down
 			else if (PlayerMotionController.instance.playerFacing == facing.down)
 			{
-				rb.AddForce(gameObject.transform.up * -pushBackForce * 100);
+				rb.AddForce(gameObject.transform.up * -pushBackForce * 100 * playerStrength);
 			}
 		}
 	}

@@ -15,6 +15,7 @@ public class CreationManager : MonoBehaviour
 	public Text speedField;
 	public Text strengthField;
 	public Text wisdomField;
+	public Text statExplanation;
 
 	public GameObject outOfPointsPrompt;
 
@@ -43,14 +44,17 @@ public class CreationManager : MonoBehaviour
 			case "speed":
 				speedAmount += 1;
 				trainingPointsAmount -= 1;
+				statExplanation.text = "Speed determines how fast you move. Beware: low values will make you very slow!";
 				break;
 			case "strength":
 				strengthAmount += 1;
 				trainingPointsAmount -= 1;
+				statExplanation.text = "Strength determines how much damage you deal and how far you push enemies. If you hit hard enough, some enemies will flee from you!";
 				break;
 			case "wisdom":
 				wisdomAmount += 1;
 				trainingPointsAmount -= 1;
+				statExplanation.text = "Wisdom determines how strong your magic is.";
 				break;
 			default:
 				break;

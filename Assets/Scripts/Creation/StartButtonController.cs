@@ -1,4 +1,9 @@
-﻿using System.Collections;
+﻿/*
+ * This script gives the Start Button at the character creation screen functionality 
+ * 
+ */
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;

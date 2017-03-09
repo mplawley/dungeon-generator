@@ -3,7 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Sword
+  - Monster manager
+  - Trap
+  - Wall
+  - Door
   layers:
   - Default
   - TransparentFX
@@ -13,8 +18,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - Traps
+  - Blocking
   - 
   - 
   - 
@@ -40,4 +45,16 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Room
+    uniqueID: 2554104793
+    locked: 0
+  - name: Blocker
+    uniqueID: 4255720767
+    locked: 0
+  - name: Player
+    uniqueID: 584296183
+    locked: 0
+  - name: Enemy
+    uniqueID: 4257382959
     locked: 0

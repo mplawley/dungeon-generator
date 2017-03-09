@@ -41,6 +41,9 @@ public class PlayerMotionController : MonoBehaviour
 		//Component hookups
 		rb = gameObject.GetComponent<Rigidbody2D>();
 		animator = gameObject.GetComponent<Animator>();
+
+		//Override inspector speed, but allow Inspector to override this for debugging...
+		speed = MemoryManager.instance.allGameDataOnSingleton.dungeonData.playerSpeed;
 	}
 
 	//Actuate the player based on input
