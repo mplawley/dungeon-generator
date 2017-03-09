@@ -10,10 +10,10 @@ public class LevelManager : MonoBehaviour
 
 	[Header("Overall architecture")]
 	[SerializeField]
-	int DungeonWidthInRooms;
+	int DungeonRowsInRooms;
 
 	[SerializeField]
-	int DungeonHeightInRooms;
+	int DungeonColsInRooms;
 
 	[SerializeField]
 	int minRoomsBetweenEnterAndExit;
@@ -41,8 +41,8 @@ public class LevelManager : MonoBehaviour
 	void Start()
 	{
 		//Bookkeeping for which rooms have hallway junctures connecting them...
-		connectedRoomsArray = new bool[DungeonHeightInRooms, DungeonWidthInRooms];
-		gameObjectArray = new GameObject[DungeonHeightInRooms,DungeonWidthInRooms];
+		connectedRoomsArray = new bool[DungeonColsInRooms, DungeonRowsInRooms];
+		gameObjectArray = new GameObject[DungeonColsInRooms,DungeonRowsInRooms];
 		InitializeConnectedRoomsArray();
 
 		//Place rooms....
@@ -61,9 +61,9 @@ public class LevelManager : MonoBehaviour
 		bool southernmost = false;
 
 		//Place rooms
-		for (int i = 0; i < DungeonHeightInRooms; i++)
+		for (int i = 0; i < DungeonColsInRooms; i++)
 		{
-			for (int j = 0; j < DungeonWidthInRooms; j++)
+			for (int j = 0; j < DungeonRowsInRooms; j++)
 			{
 				//Check if this room is an outermost one in the dungeon....
 				//Reset bools
@@ -81,11 +81,11 @@ public class LevelManager : MonoBehaviour
 				{
 					westernmost = true;
 				}
-				if (i == DungeonHeightInRooms - 1)
+				if (i == DungeonColsInRooms - 1)
 				{
 					southernmost = true;
 				}
-				if (j == DungeonWidthInRooms - 1)
+				if (j == DungeonRowsInRooms - 1)
 				{
 					easternmost = true;
 				}

@@ -413,13 +413,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf2046729743d40fa8204431388b04fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackPosition: {fileID: 0}
-  attackRadius: 0
-  maxObjectsHit: 5
-  objectsHit: []
-  selectObjectsToHit:
-    serializedVersion: 2
-    m_Bits: 0
   swordLeft: {fileID: 1420283240}
   swordUp: {fileID: 656813586}
   swordRight: {fileID: 767371995}
@@ -603,8 +596,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec8c0f6c1e324c5389dd6936f58c968, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DungeonWidthInRooms: 5
-  DungeonHeightInRooms: 5
+  DungeonRowsInRooms: 5
+  DungeonColsInRooms: 10
   minRoomsBetweenEnterAndExit: 6
   roomWidth: 25
   roomHeight: 25
