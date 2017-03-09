@@ -460,7 +460,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DungeonRowsInRooms: 10
   DungeonColsInRooms: 10
-  minRoomsBetweenEnterAndExit: 6
+  minRoomsBetweenEnterAndExit: 10
   roomWidth: 14
   roomHeight: 14
   playerPrefab: {fileID: 1102253268381146, guid: 360ffd40ec0cb4866a9635cba5764337,

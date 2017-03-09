@@ -5,7 +5,7 @@ using UnityEngine;
 public class TrapController : MonoBehaviour
 {
 	//Trap hurts the player
-	public int damageDealt;
+	public int damageDealt = 1;
 
 	void OnTriggerEnter2D (Collider2D coll)
 	{

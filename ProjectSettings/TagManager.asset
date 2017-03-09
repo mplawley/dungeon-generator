@@ -51,12 +51,12 @@ TagManager:
   - name: Room
     uniqueID: 2554104793
     locked: 0
-  - name: Blocker
-    uniqueID: 4255720767
-    locked: 0
   - name: Player
     uniqueID: 584296183
     locked: 0
   - name: Enemy
     uniqueID: 4257382959
+    locked: 0
+  - name: Blocker
+    uniqueID: 4255720767
     locked: 0
