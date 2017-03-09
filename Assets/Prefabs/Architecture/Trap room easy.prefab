@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 95726067017844212}
   - component: {fileID: 61506095900494410}
   - component: {fileID: 114861101635922498}
+  - component: {fileID: 50854126186854848}
   m_Layer: 0
   m_Name: Spin trap
   m_TagString: Untagged
@@ -96,7 +97,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1467007092040560}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.4843674, y: -4.799556, z: 0}
+  m_LocalPosition: {x: -3.8494196, y: -3.9657767, z: 0}
   m_LocalScale: {x: 7.6402116, y: 7.6402116, z: 7.6402116}
   m_Children:
   - {fileID: 4163095511270280}
@@ -141,6 +142,26 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1727861727477010}
   m_Mesh: {fileID: 4300000, guid: 778d36db5b078174c93a9b156467e4f5, type: 3}
+--- !u!50 &50854126186854848
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1598546503875378}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!61 &61506095900494410
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -150,11 +171,11 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_Offset: {x: -0.0000035762787, y: 0.020240992}
+  m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Size: {x: 1.5127864, y: 1.5532727}
+  m_Size: {x: 2, y: 2}
 --- !u!95 &95726067017844212
 Animator:
   serializedVersion: 3
