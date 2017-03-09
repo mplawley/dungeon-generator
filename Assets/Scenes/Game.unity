@@ -243,7 +243,7 @@ MonoBehaviour:
   architectureParent: {fileID: 1508618358}
   junctureParent: {fileID: 1722098164}
   solidWallParent: {fileID: 244539772}
-  architectureOffset: -2.7
+  architectureOffset: 0
 --- !u!1 &660970196
 GameObject:
   m_ObjectHideFlags: 0
@@ -625,16 +625,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dungeonHolder: {fileID: 1940147692}
-  transitionVectorLeft: {x: -7, y: 0, z: 0}
-  transitionVectorRight: {x: 7, y: 0, z: 0}
-  transitionVectorUp: {x: 0, y: 7, z: 0}
-  transitionVectorDown: {x: 0, y: -7, z: 0}
-  playerSouthPosition: {x: 0, y: 0, z: 0}
-  playerWestPosition: {x: 0, y: 0, z: 0}
-  playerEastPosition: {x: 0, y: 0, z: 0}
-  playerNorthPosition: {x: 0, y: 0, z: 0}
-  transitionSpeed: 5
-  touchedDoor: 0
+  transitionVectorLeft: {x: -14, y: 0, z: 0}
+  transitionVectorRight: {x: 14, y: 0, z: 0}
+  transitionVectorUp: {x: 0, y: 14, z: 0}
+  transitionVectorDown: {x: 0, y: -14, z: 0}
+  newPlayerPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &1508618357
 GameObject:
   m_ObjectHideFlags: 0
