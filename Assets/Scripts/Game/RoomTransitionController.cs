@@ -25,7 +25,7 @@ public class RoomTransitionController : MonoBehaviour
 
 	void Start()
 	{
-		dungeonAnimator = dungeonAnimatorObject.GetComponent<Animator> ();
+		//dungeonAnimator = dungeonAnimatorObject.GetComponent<Animator> ();
 	}
 
 

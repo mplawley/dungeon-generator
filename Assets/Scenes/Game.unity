@@ -1372,6 +1372,8 @@ MonoBehaviour:
     xMax: 7
     yMin: -6.1
     yMax: 7
+  moveHorizontal: 0
+  moveVertical: 0
 --- !u!212 &1314776148
 SpriteRenderer:
   m_ObjectHideFlags: 0

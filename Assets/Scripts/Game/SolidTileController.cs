@@ -21,14 +21,12 @@ public class SolidTileController : MonoBehaviour
 
 	void OnTriggerEnter2D (Collider2D other)
 	{
-		print ("Entered triugger, pos: " + tilePosition + ", player pos: " + player.transform.position);
 		if (other.gameObject == player)
 		{
 			//Push player away
 			//Push to the right
 			if (player.transform.position.x > tilePosition.x)
 			{
-				print("Player is to be pushed right");
 				playerRB.AddForce(player.transform.right * pushBackForce * 100);
 			}
 			//Push to the left
