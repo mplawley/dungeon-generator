@@ -23,10 +23,12 @@ public class SolidTileController : MonoBehaviour
 	{
 		if (other.gameObject == player)
 		{
+			print ("entered trigger");
 			//Push player away
 			//Push to the right
 			if (player.transform.position.x > tilePosition.x)
 			{
+				print ("push to the right");
 				playerRB.AddForce(player.transform.right * pushBackForce * 100);
 			}
 			//Push to the left
