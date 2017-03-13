@@ -9,6 +9,9 @@ using UnityEngine;
 
 public class RoomTransitionController : MonoBehaviour
 {
+	public GameObject dungeonAnimatorObject;
+	Animator dungeonAnimator;
+
 	public Transform dungeonHolder;
 	public Vector3 transitionVectorLeft;
 	public Vector3 transitionVectorRight;
@@ -20,6 +23,10 @@ public class RoomTransitionController : MonoBehaviour
 
 	private float step = 1.0f;
 
+	void Start()
+	{
+		dungeonAnimator = dungeonAnimatorObject.GetComponent<Animator> ();
+	}
 
 
 	void OnTriggerEnter2D(Collider2D coll)
@@ -60,6 +67,8 @@ public class RoomTransitionController : MonoBehaviour
 			else if (PlayerMotionController.instance.playerFacing == facing.left)
 			{
 				//Move dungeon....
+				//dungeonAnimator.SetTrigger("transLeft");
+
 				newDungeonPosition = dungeonHolder.position - transitionVectorLeft;
 				dungeonHolder.position = newDungeonPosition;
 

@@ -17,8 +17,8 @@ public class PlayerMotionController : MonoBehaviour
 
 	//non-inspector fields
 	public Boundary boundary;
-	float moveHorizontal;
-	float moveVertical;
+	public float moveHorizontal;
+	public float moveVertical;
 	Vector3 movement;
 	Rigidbody2D rb;
 	Animator animator;
@@ -54,11 +54,11 @@ public class PlayerMotionController : MonoBehaviour
 		moveHorizontal = Input.GetAxisRaw ("Horizontal");
 		moveVertical = Input.GetAxisRaw ("Vertical");
 
-		//Movement calculation
+		//Movement calculation and execution
 		movement = new Vector3 (moveHorizontal, moveVertical, 0.0f);
 		rb.velocity = movement * speed;
 
-		//Movement execution
+		//Movement bounds
 		rb.position = new Vector3 
 			(
 				Mathf.Clamp (rb.position.x, boundary.xMin, boundary.xMax), 
@@ -72,17 +72,17 @@ public class PlayerMotionController : MonoBehaviour
 			animator.SetTrigger("moveLeft");
 			playerFacing = facing.left;
 		}
-		if (moveHorizontal > 0)
+		else if (moveHorizontal > 0)
 		{
 			animator.SetTrigger("moveRight");
 			playerFacing = facing.right;
 		}
-		if (moveVertical < 0)
+		else if (moveVertical < 0)
 		{
 			animator.SetTrigger("moveDown");
 			playerFacing = facing.down;
 		}
-		if (moveVertical > 0)
+		else if (moveVertical > 0)
 		{
 			animator.SetTrigger("moveUp");
 			playerFacing = facing.up;

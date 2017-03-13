@@ -59,7 +59,6 @@ public class LevelManager : MonoBehaviour
 		gameObjectArray = new GameObject[DungeonColsInRooms,DungeonRowsInRooms];
 		roomsArray = new Room[DungeonColsInRooms, DungeonRowsInRooms]; //Used to see if we have a straight journey through the Matrix-dungeon
 
-
 		InitializeConnectedRoomsArray();
 		//InitializeMatrixPathfindingArray();
 
