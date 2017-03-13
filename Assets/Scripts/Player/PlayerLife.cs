@@ -69,7 +69,7 @@ public class PlayerLife : MonoBehaviour
 		SetPlayerHearts();
 
 		//Death
-		if (life < 0)
+		if (life <= 0)
 		{
 			animator.SetTrigger ("death");
 			Invoke ("PlayerDead", 0.5f);
