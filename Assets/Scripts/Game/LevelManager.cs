@@ -237,101 +237,92 @@ public class LevelManager : MonoBehaviour
 		int j = DungeonRowsInRooms/2;
 		int numberOfRoomsInPath = 0;
 
-		bool continuousPathMade = CrawlMatrix (i, j, numberOfRoomsInPath);
-
-		if(!continuousPathMade)
-		{
-			ResetBookmarking ();
-
-			//Start over....
-			EnsureContinuousPath ();
-		}
-		else
-		{
-			return;
-		}
+		CrawlMatrix (i, j, numberOfRoomsInPath);
 	}
 
-	void ResetBookmarking()
+	void CrawlMatrix(int i, int j, int numberOfRoomsInPath)
 	{
-		for (int i = 0; i < roomsArray.GetLength (0); i++)
-		{
-			for (int j = 0; j < roomsArray.GetLength (1); j++)
-			{
-				roomsArray [i, j].thisRoomCrawled = false;
-			}
-		}
-	}
-
-	bool CrawlMatrix(int i, int j, int numberOfRoomsInPath)
-	{
-		print ("i: " + i + " j: " + j);
-
 		//Base case: If we found an exit, return....
 		if (roomsArray [i, j].northExit || roomsArray [i, j].eastExit || roomsArray [i, j].southExit || roomsArray [i, j].westExit)
 		{
-			return true;
+			return;
 		}
 
 		//Otherwise, move indexes by following door-rich paths...
-		if (roomsArray [i, j].northDoor && !roomsArray[j-1, j].thisRoomCrawled)
+		roomsArray [i, j].thisRoomCrawled = true;
+		numberOfRoomsInPath += 1;
+
+		if (roomsArray [i, j].northDoor && !roomsArray [j - 1, j].thisRoomCrawled && (j-1) >= 0)
 		{
 			j -= 1;
-			numberOfRoomsInPath += 1;
-			roomsArray [i, j].thisRoomCrawled = true;
 			CrawlMatrix (i, j, numberOfRoomsInPath);
 		}
-		else if (roomsArray [i, j].eastDoor && !roomsArray[i+1, j].thisRoomCrawled)
+		else if (roomsArray [i, j].eastDoor && !roomsArray [i + 1, j].thisRoomCrawled && (i+1) <= DungeonColsInRooms)
 		{
 			i += 1;
-			numberOfRoomsInPath += 1;
-			roomsArray [i, j].thisRoomCrawled = true;
 			CrawlMatrix (i, j, numberOfRoomsInPath);
 		}
-		else if (roomsArray [i, j].southDoor && !roomsArray[i, j+1].thisRoomCrawled)
+		else if (roomsArray [i, j].southDoor && !roomsArray [i, j + 1].thisRoomCrawled && (j+1) <= DungeonRowsInRooms)
 		{
 			j += 1;
-			numberOfRoomsInPath += 1;
-			roomsArray [i, j].thisRoomCrawled = true;
 			CrawlMatrix (i, j, numberOfRoomsInPath);
 		}
-		else if (roomsArray [i, j].westDoor && !roomsArray[i-1, j].thisRoomCrawled)
+		else if (roomsArray [i, j].westDoor && !roomsArray [i - 1, j].thisRoomCrawled && (i-1) >= 0)
 		{
 			i -= 1;
-			numberOfRoomsInPath += 1;
-			roomsArray [i, j].thisRoomCrawled = true;
 			CrawlMatrix (i, j, numberOfRoomsInPath);
 		}
 
-		//If we haven't recursively called the function by now, we need to make another door and return false....
-		if (roomsArray [i, j].eastDoor)
+		//If we haven't recursively called the function by now, we need to make another door....
+		if (roomsArray [i, j].eastDoor && (i-1) >= 0)
 		{
 			//Door to the west....
-			GameObject newExit = Instantiate (juncturePrefab, new Vector3 (i * roomWidth - roomWidth / 2 - architectureOffset, j * roomHeight, 0), Quaternion.Euler (0, 0, -90)) as GameObject;
-			newExit.transform.parent = junctureParent;
-			return false;
+			GameObject newDoor = Instantiate (juncturePrefab, new Vector3 (i * roomWidth - roomWidth / 2 - architectureOffset, j * roomHeight, 0), Quaternion.Euler (0, 0, -90)) as GameObject;
+			newDoor.transform.parent = junctureParent;
+
+			//Go west...
+			i -= 1;
+			CrawlMatrix (i, j, numberOfRoomsInPath);
 		}
-		else if (roomsArray [i, j].westDoor)
+		else if (roomsArray [i, j].westDoor && (i+1) <= DungeonColsInRooms)
 		{
 			//Exit to the east....
-			GameObject newExit = Instantiate (juncturePrefab, new Vector3 (i * roomWidth + roomWidth / 2 + architectureOffset, j * roomHeight, 0), Quaternion.Euler (0, 0, 90)) as GameObject;
-			newExit.transform.parent = junctureParent;
-			return false;
+			GameObject newDoor = Instantiate (juncturePrefab, new Vector3 (i * roomWidth + roomWidth / 2 + architectureOffset, j * roomHeight, 0), Quaternion.Euler (0, 0, 90)) as GameObject;
+			newDoor.transform.parent = junctureParent;
+
+			//Go east
+			i += 1;
+			CrawlMatrix (i, j, numberOfRoomsInPath);
 		}
-		else if (roomsArray [i, j].northDoor)
+		else if (roomsArray [i, j].northDoor && (j+1) <= DungeonRowsInRooms)
 		{
 			//Exit to the south....
-			GameObject newExit = Instantiate (juncturePrefab, new Vector3 (i * roomWidth, j * roomHeight + roomHeight / 2 + architectureOffset, 0), Quaternion.Euler (0, 0, 180)) as GameObject;
-			newExit.transform.parent = junctureParent;
-			return false;
+			GameObject newDoor = Instantiate (juncturePrefab, new Vector3 (i * roomWidth, j * roomHeight + roomHeight / 2 + architectureOffset, 0), Quaternion.Euler (0, 0, 180)) as GameObject;
+			newDoor.transform.parent = junctureParent;
+
+			//Go south....
+			j += 1;
+			CrawlMatrix (i, j, numberOfRoomsInPath);
 		}
-		else if (roomsArray [i, j].southDoor)
+		else if (roomsArray [i, j].southDoor && (j-1) >= 0)
 		{
 			//Exit to the north....
-			GameObject newExit = Instantiate (juncturePrefab, new Vector3 (i * roomWidth, j * roomHeight - roomHeight / 2 - architectureOffset, 0), Quaternion.identity) as GameObject;
-			newExit.transform.parent = junctureParent;
-			return false;
+			GameObject newDoor = Instantiate (juncturePrefab, new Vector3 (i * roomWidth, j * roomHeight - roomHeight / 2 - architectureOffset, 0), Quaternion.identity) as GameObject;
+			newDoor.transform.parent = junctureParent;
+
+			//Go north...
+			j -= 1;
+			CrawlMatrix (i, j, numberOfRoomsInPath);
 		}
+
+		//Otherwise, make an exit and return....
+		if (numberOfRoomsInPath >= minRoomsBetweenEnterAndExit)
+		{
+			//TODO
+			return;
+		}
+
+		return;
 	}
 		
 	//Cut out orphan rooms....
