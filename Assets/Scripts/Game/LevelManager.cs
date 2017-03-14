@@ -137,7 +137,11 @@ public class LevelManager : MonoBehaviour
 					if(!northernmost)
 					{
 						juncture = Instantiate (juncturePrefab, new Vector3 (i * roomWidth, j * roomHeight + roomHeight / 2 + architectureOffset, 0), Quaternion.identity) as GameObject; //Adding goes up world space
-						correspondingJuncture = Instantiate (juncturePrefab, new Vector3 (i * roomWidth, (j - 1) * roomHeight - roomHeight / 2 - architectureOffset), Quaternion.Euler (0, 0, 180)) as GameObject;
+
+						if(!southernmost)
+						{
+							correspondingJuncture = Instantiate (juncturePrefab, new Vector3 (i * roomWidth, (j - 1) * roomHeight - roomHeight / 2 - architectureOffset), Quaternion.Euler (0, 0, 180)) as GameObject;
+						}
 
 						//Update connections
 						connectedRoomsArray [i, j] = true;
@@ -152,7 +156,10 @@ public class LevelManager : MonoBehaviour
 					if(!easternmost)
 					{
 						juncture = Instantiate (juncturePrefab, new Vector3 (i * roomWidth + roomWidth / 2 + architectureOffset, j * roomHeight, 0), Quaternion.Euler (0, 0, 90)) as GameObject; //Adding goes right on world space
-						correspondingJuncture = Instantiate (juncturePrefab, new Vector3 ((i + 1) * roomWidth - roomWidth / 2 - architectureOffset, j * roomHeight), Quaternion.Euler (0, 0, -90)) as GameObject;
+						if(!westernmost)
+						{
+							correspondingJuncture = Instantiate (juncturePrefab, new Vector3 ((i + 1) * roomWidth - roomWidth / 2 - architectureOffset, j * roomHeight), Quaternion.Euler (0, 0, -90)) as GameObject;
+						}
 
 						//Update connections
 						connectedRoomsArray [i, j] = true;
@@ -167,7 +174,10 @@ public class LevelManager : MonoBehaviour
 					if(!southernmost)
 					{
 						juncture = Instantiate (juncturePrefab, new Vector3 (i * roomWidth, j * roomHeight - roomHeight / 2 - architectureOffset, 0), Quaternion.Euler (0, 0, 180)) as GameObject; //Subtracrting goes south on world space
-						correspondingJuncture = Instantiate (juncturePrefab, new Vector3 (i * roomWidth, (j + 1) * roomHeight + roomHeight / 2 + architectureOffset), Quaternion.identity) as GameObject;
+						if(!northernmost)
+						{
+							correspondingJuncture = Instantiate (juncturePrefab, new Vector3 (i * roomWidth, (j + 1) * roomHeight + roomHeight / 2 + architectureOffset), Quaternion.identity) as GameObject;
+						}
 
 						//Update connections
 						connectedRoomsArray [i, j] = true;
@@ -182,7 +192,10 @@ public class LevelManager : MonoBehaviour
 					if(!westernmost)
 					{
 						juncture = Instantiate (juncturePrefab, new Vector3 (i * roomWidth - roomWidth / 2 - architectureOffset, j * roomHeight, 0), Quaternion.Euler (0, 0, -90)) as GameObject; //Subtracting goes left in world space
-						correspondingJuncture = Instantiate (juncturePrefab, new Vector3 ((i - 1) * roomWidth + roomWidth / 2 + architectureOffset, j * roomHeight), Quaternion.Euler (0, 0, 90)) as GameObject;
+						if(!easternmost)
+						{
+							correspondingJuncture = Instantiate (juncturePrefab, new Vector3 ((i - 1) * roomWidth + roomWidth / 2 + architectureOffset, j * roomHeight), Quaternion.Euler (0, 0, 90)) as GameObject;
+						}
 					
 						//Update connections
 						connectedRoomsArray [i, j] = true;
