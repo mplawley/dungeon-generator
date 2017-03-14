@@ -76,15 +76,16 @@ public class LevelManager : MonoBehaviour
 		//MatrixContinuousPathCheck();
 	}
 
+	//This function places the rooms iteratively onto the game board
 	void PlaceRooms()
 	{
-		//Bookkeeping for perimeter rooms of the dungeon....
+		//Bookkeeping for perimeter rooms of the dungeon
 		bool northernmost = false;
 		bool westernmost = false;
 		bool easternmost = false;
 		bool southernmost = false;
 
-		//Place rooms
+		//Place rooms by iterating through the dungeon matrix and translating position within the 2D array into world space dungeon prefab placements...
 		for (int i = 0; i < DungeonColsInRooms; i++)
 		{
 			for (int j = 0; j < DungeonRowsInRooms; j++)
@@ -94,7 +95,7 @@ public class LevelManager : MonoBehaviour
 				int middleRow = DungeonRowsInRooms / 2;
 				if (i == middleCol && j == middleRow)
 				{
-					//Set the first room to true
+					//Set the first room's connections to true.
 					connectedRoomsArray[middleCol, middleRow] = true;
 				}
 
@@ -105,7 +106,7 @@ public class LevelManager : MonoBehaviour
 				easternmost = false;
 				southernmost = false;
 
-				//Check bools
+				//Check those bools
 				if (i == 0)
 				{
 					westernmost = true;
@@ -123,86 +124,84 @@ public class LevelManager : MonoBehaviour
 					southernmost = true;
 				}
 
-				//Otherwise, this is an interior room. Generate junctures to other rooms in the matrix....
+				//If we aren't on the perimeter, then we are currently placing an interior room. Generate junctures to other rooms in the matrix....
 				Compass direction = (Compass)Random.Range(0,4);
-				GameObject juncture;
-				GameObject correspondingJuncture; //To connect rooms. E.g., if a room has a north door, the room above it must have a south door....
+
+				//Initialize juncture and correspondingJuncture to any gameObject before the switch statement assigns them correctly...
+				GameObject juncture = this.gameObject;
+				GameObject correspondingJuncture = this.gameObject; //To connect rooms. E.g., if a room has a north door, the room above it must have a south door....
 
 				switch (direction)
 				{
 				case Compass.North:
-					if (!northernmost)
+					if(!northernmost)
 					{
-						juncture = Instantiate(juncturePrefab, new Vector3(i * roomWidth, j * roomHeight + roomHeight / 2 + architectureOffset, 0), Quaternion.identity) as GameObject; //Adding goes up world space
-						correspondingJuncture = Instantiate(juncturePrefab, new Vector3(i * roomWidth, (j-1) * roomHeight - roomHeight / 2 - architectureOffset), Quaternion.Euler(0, 0, 180)) as GameObject;
-						                                    
-						//Set juncture parent transform...
-						juncture.transform.parent = junctureParent;
-						correspondingJuncture.transform.parent = junctureParent;
+						juncture = Instantiate (juncturePrefab, new Vector3 (i * roomWidth, j * roomHeight + roomHeight / 2 + architectureOffset, 0), Quaternion.identity) as GameObject; //Adding goes up world space
+						correspondingJuncture = Instantiate (juncturePrefab, new Vector3 (i * roomWidth, (j - 1) * roomHeight - roomHeight / 2 - architectureOffset), Quaternion.Euler (0, 0, 180)) as GameObject;
 
 						//Update connections
-						connectedRoomsArray[i, j] = true;
-						connectedRoomsArray[i, j - 1] = true; //Room to the north must be connected. Subtracting goes up the matrix, adding goes down.
-//						roomsArray[i, j].SetNorth = true; //This room has a north door and...
-//						roomsArray[i, j+1].SetSouth = true; //The room up in the matrix must have a south door now...
+						connectedRoomsArray [i, j] = true;
+						connectedRoomsArray [i, j - 1] = true; //Room to the north must be connected. Subtracting goes up the matrix, adding goes down.
+					}
+					else //Place an exit since we are at an outer wall...
+					{
+						juncture = Instantiate (exitPrefab, new Vector3 (i * roomWidth, j * roomHeight + roomHeight / 2 + architectureOffset, 0), Quaternion.identity) as GameObject;
 					}
 					break;
 				case Compass.East:
-					if (!easternmost)
+					if(!easternmost)
 					{
-						juncture = Instantiate(juncturePrefab, new Vector3(i * roomWidth + roomWidth / 2 + architectureOffset, j * roomHeight, 0), Quaternion.Euler(0,0,90)) as GameObject; //Adding goes right on world space
-						correspondingJuncture = Instantiate(juncturePrefab, new Vector3((i+1) * roomWidth - roomWidth / 2 - architectureOffset, j * roomHeight), Quaternion.Euler(0, 0, -90)) as GameObject;
-
-						//Set juncture parent transform...
-						juncture.transform.parent = junctureParent;
-						correspondingJuncture.transform.parent = junctureParent;
+						juncture = Instantiate (juncturePrefab, new Vector3 (i * roomWidth + roomWidth / 2 + architectureOffset, j * roomHeight, 0), Quaternion.Euler (0, 0, 90)) as GameObject; //Adding goes right on world space
+						correspondingJuncture = Instantiate (juncturePrefab, new Vector3 ((i + 1) * roomWidth - roomWidth / 2 - architectureOffset, j * roomHeight), Quaternion.Euler (0, 0, -90)) as GameObject;
 
 						//Update connections
-						connectedRoomsArray[i, j] = true;
-						connectedRoomsArray[i + 1, j] = true; //Room to the east must be connected. Adding goes east in the matrix, subtracting goes west.
-//						roomsArray[i, j].SetEast = true; //This room has an east door and...
-//						roomsArray[i+1, j].SetWest = true; //The room to the right in the matrix must have a west door now...
+						connectedRoomsArray [i, j] = true;
+						connectedRoomsArray [i + 1, j] = true; //Room to the east must be connected. Adding goes east in the matrix, subtracting goes west.
+					}
+					else //Place an exit since we are at an outer wall....
+					{
+						juncture = Instantiate (exitPrefab, new Vector3 (i * roomWidth + roomWidth / 2 + architectureOffset, j * roomHeight, 0), Quaternion.Euler (0, 0, 90)) as GameObject; 
 					}
 					break;
 				case Compass.South:
-					if (!southernmost)
+					if(!southernmost)
 					{
-						juncture = Instantiate(juncturePrefab, new Vector3(i * roomWidth, j * roomHeight - roomHeight / 2 - architectureOffset, 0), Quaternion.Euler(0,0,180)) as GameObject; //Subtracrting goes south on world space
-						correspondingJuncture = Instantiate(juncturePrefab, new Vector3(i * roomWidth, (j+1) * roomHeight + roomHeight / 2 + architectureOffset), Quaternion.identity) as GameObject;
-
-						//Set juncture parent transform...
-						juncture.transform.parent = junctureParent;
-						correspondingJuncture.transform.parent = junctureParent;
+						juncture = Instantiate (juncturePrefab, new Vector3 (i * roomWidth, j * roomHeight - roomHeight / 2 - architectureOffset, 0), Quaternion.Euler (0, 0, 180)) as GameObject; //Subtracrting goes south on world space
+						correspondingJuncture = Instantiate (juncturePrefab, new Vector3 (i * roomWidth, (j + 1) * roomHeight + roomHeight / 2 + architectureOffset), Quaternion.identity) as GameObject;
 
 						//Update connections
-						connectedRoomsArray[i, j] = true;
-						connectedRoomsArray[i, j + 1] = true; //room to the south must be connected. Subtracting goes up the matrix, adding down.
-//						roomsArray[i, j].SetSouth = true; //This room has a south door and...
-//						roomsArray[i, j-1].SetNorth = true; //next room down in the matrix must have a north door....
+						connectedRoomsArray [i, j] = true;
+						connectedRoomsArray [i, j + 1] = true; //room to the south must be connected. Subtracting goes up the matrix, adding down.
+					}
+					else //Place an exit since we are at an outer wall...
+					{
+						juncture = Instantiate(exitPrefab, new Vector3(i * roomWidth, j * roomHeight - roomHeight / 2 - architectureOffset, 0), Quaternion.Euler(0,0,180)) as GameObject; 
 					}
 					break;
 				case Compass.West:
-					if (!westernmost)
+					if(!westernmost)
 					{
-						juncture = Instantiate(juncturePrefab, new Vector3(i * roomWidth - roomWidth/2 - architectureOffset, j * roomHeight, 0), Quaternion.Euler(0,0,-90)) as GameObject; //Subtracting goes left in world space
-						correspondingJuncture = Instantiate(juncturePrefab, new Vector3((i-1) * roomWidth + roomWidth / 2 + architectureOffset, j * roomHeight), Quaternion.Euler(0, 0, 90)) as GameObject;
-
-						//Set juncture parent transform...
-						juncture.transform.parent = junctureParent;
-						correspondingJuncture.transform.parent = junctureParent;
-
+						juncture = Instantiate (juncturePrefab, new Vector3 (i * roomWidth - roomWidth / 2 - architectureOffset, j * roomHeight, 0), Quaternion.Euler (0, 0, -90)) as GameObject; //Subtracting goes left in world space
+						correspondingJuncture = Instantiate (juncturePrefab, new Vector3 ((i - 1) * roomWidth + roomWidth / 2 + architectureOffset, j * roomHeight), Quaternion.Euler (0, 0, 90)) as GameObject;
+					
 						//Update connections
-						connectedRoomsArray[i, j] = true;
-						connectedRoomsArray[i - 1, j] = true; //Room to the west must be connected. Adding goes east in the matrix, subtracting goes west.
-//						roomsArray[i, j].SetWest = true; //This room has a west door and...
-//						roomsArray[i-1, j].SetEast = true; //The room one to the left in the matrix must have an east door now....
+						connectedRoomsArray [i, j] = true;
+						connectedRoomsArray [i - 1, j] = true; //Room to the west must be connected. Adding goes east in the matrix, subtracting goes west.
+					}
+					else //Place an exit since we are at an outer wall....
+					{
+						juncture = Instantiate(exitPrefab, new Vector3(i * roomWidth - roomWidth/2 - architectureOffset, j * roomHeight, 0), Quaternion.Euler(0,0,-90)) as GameObject;
 					}
 					break;
 				default:
 					break;
 				}
+
+				//Set juncture parent transform...
+				juncture.transform.parent = junctureParent;
+				correspondingJuncture.transform.parent = junctureParent;
 					
-				//Finally, place the room
+				//Finally, place the room itself AFTER the above junctures are placed....
 				int randomRoomNum = Random.Range(0, roomPrefabs.Count);
 				GameObject room = Instantiate(roomPrefabs[randomRoomNum], new Vector3(i * roomHeight, j * roomWidth, 0), Quaternion.identity) as GameObject;
 				room.transform.parent = architectureParent;
