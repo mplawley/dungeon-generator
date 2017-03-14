@@ -136,11 +136,11 @@ public class LevelManager : MonoBehaviour
 				case Compass.North:
 					if(!northernmost)
 					{
-						juncture = Instantiate (juncturePrefab, new Vector3 (i * roomWidth, j * roomHeight + roomHeight / 2 + architectureOffset, 0), Quaternion.identity) as GameObject; //Adding goes up world space
+						juncture = Instantiate (juncturePrefab, new Vector3 (i * roomWidth, j * roomHeight - roomHeight / 2 - architectureOffset, 0), Quaternion.identity) as GameObject; //Subtracting goes UP world space, now oriented like the matrix
 
 						if(!southernmost)
 						{
-							correspondingJuncture = Instantiate (juncturePrefab, new Vector3 (i * roomWidth, (j - 1) * roomHeight - roomHeight / 2 - architectureOffset), Quaternion.Euler (0, 0, 180)) as GameObject;
+							correspondingJuncture = Instantiate (juncturePrefab, new Vector3 (i * roomWidth, (j - 1) * roomHeight + roomHeight / 2 + architectureOffset), Quaternion.Euler (0, 0, 180)) as GameObject;
 						}
 
 						//Update connections
@@ -149,13 +149,14 @@ public class LevelManager : MonoBehaviour
 					}
 					else //Place an exit since we are at an outer wall...
 					{
-						juncture = Instantiate (exitPrefab, new Vector3 (i * roomWidth, j * roomHeight + roomHeight / 2 + architectureOffset, 0), Quaternion.identity) as GameObject;
+						juncture = Instantiate (exitPrefab, new Vector3 (i * roomWidth, j * roomHeight - roomHeight / 2 - architectureOffset, 0), Quaternion.identity) as GameObject;
 					}
 					break;
 				case Compass.East:
 					if(!easternmost)
 					{
 						juncture = Instantiate (juncturePrefab, new Vector3 (i * roomWidth + roomWidth / 2 + architectureOffset, j * roomHeight, 0), Quaternion.Euler (0, 0, 90)) as GameObject; //Adding goes right on world space
+
 						if(!westernmost)
 						{
 							correspondingJuncture = Instantiate (juncturePrefab, new Vector3 ((i + 1) * roomWidth - roomWidth / 2 - architectureOffset, j * roomHeight), Quaternion.Euler (0, 0, -90)) as GameObject;
@@ -173,10 +174,11 @@ public class LevelManager : MonoBehaviour
 				case Compass.South:
 					if(!southernmost)
 					{
-						juncture = Instantiate (juncturePrefab, new Vector3 (i * roomWidth, j * roomHeight - roomHeight / 2 - architectureOffset, 0), Quaternion.Euler (0, 0, 180)) as GameObject; //Subtracrting goes south on world space
+						juncture = Instantiate (juncturePrefab, new Vector3 (i * roomWidth, j * roomHeight + roomHeight / 2 + architectureOffset, 0), Quaternion.Euler (0, 0, 180)) as GameObject; //Adding goes down on world space, oriented like the matrix
+
 						if(!northernmost)
 						{
-							correspondingJuncture = Instantiate (juncturePrefab, new Vector3 (i * roomWidth, (j + 1) * roomHeight + roomHeight / 2 + architectureOffset), Quaternion.identity) as GameObject;
+							correspondingJuncture = Instantiate (juncturePrefab, new Vector3 (i * roomWidth, (j + 1) * roomHeight - roomHeight / 2 - architectureOffset), Quaternion.identity) as GameObject;
 						}
 
 						//Update connections
@@ -185,13 +187,14 @@ public class LevelManager : MonoBehaviour
 					}
 					else //Place an exit since we are at an outer wall...
 					{
-						juncture = Instantiate(exitPrefab, new Vector3(i * roomWidth, j * roomHeight - roomHeight / 2 - architectureOffset, 0), Quaternion.Euler(0,0,180)) as GameObject; 
+						juncture = Instantiate(exitPrefab, new Vector3(i * roomWidth, j * roomHeight + roomHeight / 2 + architectureOffset, 0), Quaternion.Euler(0,0,180)) as GameObject; 
 					}
 					break;
 				case Compass.West:
 					if(!westernmost)
 					{
 						juncture = Instantiate (juncturePrefab, new Vector3 (i * roomWidth - roomWidth / 2 - architectureOffset, j * roomHeight, 0), Quaternion.Euler (0, 0, -90)) as GameObject; //Subtracting goes left in world space
+
 						if(!easternmost)
 						{
 							correspondingJuncture = Instantiate (juncturePrefab, new Vector3 ((i - 1) * roomWidth + roomWidth / 2 + architectureOffset, j * roomHeight), Quaternion.Euler (0, 0, 90)) as GameObject;
