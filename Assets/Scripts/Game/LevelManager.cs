@@ -40,9 +40,7 @@ public class LevelManager : MonoBehaviour
 	public List<GameObject> roomPrefabs = new List<GameObject>();
 
 	[Header("Housekeeping")]
-	//Topology and 2DArrays to meet specifics for a continous journey through the dungeon
-	public bool[,] connectedRoomsArray;
-	public List<Room> connectedRooms = new List<Room>();
+	//2DArray to meet specifics for a continous journey through the dungeon
 	public Room[,] roomsArray;
 
 	//Visual presentation
@@ -55,25 +53,32 @@ public class LevelManager : MonoBehaviour
 	void Start()
 	{
 		//Bookkeeping for which rooms have hallway junctures connecting them...
-		connectedRoomsArray = new bool[DungeonColsInRooms, DungeonRowsInRooms];
 		roomsArray = new Room[DungeonColsInRooms, DungeonRowsInRooms]; //Used to see if we have a straight journey through the Matrix-dungeon
-
-		//InitializeConnectedRoomsArray();
-		//InitializeMatrixPathfindingArray();
+		InitializeRoomsArray ();
 
 		//Place rooms....
 		PlaceRooms ();
 
 		//Ensure continuous path....
+		EnsureContinuousPath();
 
 		//Remove orphaned rooms
 		RemoveOrphanedRooms();
 
 		//Place the Dungeon Holder beneath the Player so that he is centered....
 		PlaceDungeon();
+	}
 
-		//Check for a continuous journey and update....
-		//MatrixContinuousPathCheck();
+	//Initializes the Rooms array so that there are no null values in the Rooms matrix
+	void InitializeRoomsArray()
+	{
+		for (int i = 0; i < roomsArray.GetLength (0); i++)
+		{
+			for (int j = 0; j < roomsArray.GetLength (1); j++)
+			{
+				roomsArray [i, j] = new Room ();
+			}
+		}
 	}
 
 	//This function places the rooms iteratively onto the game board
@@ -93,11 +98,6 @@ public class LevelManager : MonoBehaviour
 				//Check if this is the FIRST ROOM of the player's journey, which is in the middle of the matrix....
 				int middleCol = DungeonColsInRooms / 2;
 				int middleRow = DungeonRowsInRooms / 2;
-				if (i == middleCol && j == middleRow)
-				{
-					//Set the first room's connections to true.
-					connectedRoomsArray[middleCol, middleRow] = true;
-				}
 
 				//Check if this room is an outermost one in the dungeon....if it is, don't generate a junture to another part of the matrix....
 				//Reset bools
@@ -144,12 +144,13 @@ public class LevelManager : MonoBehaviour
 						}
 
 						//Update connections
-						connectedRoomsArray [i, j] = true;
-						connectedRoomsArray [i, j - 1] = true; //Room to the north must be connected. Subtracting goes up the matrix, adding goes down.
+						roomsArray[i,j].northDoor = true;
+						roomsArray[i,j-1].southDoor = true; //Room to the north must be connected. Subtracting goes up the matrix, adding goes down.
 					}
 					else //Place an exit since we are at an outer wall...
 					{
 						juncture = Instantiate (exitPrefab, new Vector3 (i * roomWidth, j * roomHeight - roomHeight / 2 - architectureOffset, 0), Quaternion.identity) as GameObject;
+						roomsArray [i, j].northExit = true;
 					}
 					break;
 				case Compass.East:
@@ -163,12 +164,13 @@ public class LevelManager : MonoBehaviour
 						}
 
 						//Update connections
-						connectedRoomsArray [i, j] = true;
-						connectedRoomsArray [i + 1, j] = true; //Room to the east must be connected. Adding goes east in the matrix, subtracting goes west.
+						roomsArray[i,j].eastDoor = true;
+						roomsArray [i+1, j].westDoor = true; //Room to the east must be connected. Adding goes east in the matrix, subtracting goes west. 
 					}
 					else //Place an exit since we are at an outer wall....
 					{
 						juncture = Instantiate (exitPrefab, new Vector3 (i * roomWidth + roomWidth / 2 + architectureOffset, j * roomHeight, 0), Quaternion.Euler (0, 0, 90)) as GameObject; 
+						roomsArray [i, j].eastExit = true;
 					}
 					break;
 				case Compass.South:
@@ -182,12 +184,13 @@ public class LevelManager : MonoBehaviour
 						}
 
 						//Update connections
-						connectedRoomsArray [i, j] = true;
-						connectedRoomsArray [i, j + 1] = true; //room to the south must be connected. Subtracting goes up the matrix, adding down.
+						roomsArray[i,j].southDoor = true;
+						roomsArray[i,j+1].northDoor = true; //room to the south must be connected. Subtracting goes up the matrix, adding down.
 					}
 					else //Place an exit since we are at an outer wall...
 					{
 						juncture = Instantiate(exitPrefab, new Vector3(i * roomWidth, j * roomHeight + roomHeight / 2 + architectureOffset, 0), Quaternion.Euler(0,0,180)) as GameObject; 
+						roomsArray [i, j].southExit = true;
 					}
 					break;
 				case Compass.West:
@@ -201,12 +204,13 @@ public class LevelManager : MonoBehaviour
 						}
 					
 						//Update connections
-						connectedRoomsArray [i, j] = true;
-						connectedRoomsArray [i - 1, j] = true; //Room to the west must be connected. Adding goes east in the matrix, subtracting goes west.
+						roomsArray[i,j].westDoor = true;
+						roomsArray[i-1,j].eastDoor = true; //Room to the west must be connected. Adding goes east in the matrix, subtracting goes west.
 					}
 					else //Place an exit since we are at an outer wall....
 					{
 						juncture = Instantiate(exitPrefab, new Vector3(i * roomWidth - roomWidth/2 - architectureOffset, j * roomHeight, 0), Quaternion.Euler(0,0,-90)) as GameObject;
+						roomsArray [i, j].westExit = true;
 					}
 					break;
 				default:
@@ -225,47 +229,121 @@ public class LevelManager : MonoBehaviour
 		}
 	}
 
-
-	//Initializes bookkeeping array for what rooms have hallway junctures
-	public void InitializeConnectedRoomsArray ()
+	//This ensures a continuous path between the player's start position and a dungeon exit....
+	public void EnsureContinuousPath()
 	{
-		for (int i = 0; i < connectedRoomsArray.GetLength(0); i++)
+		//Counters for navigating the matrix. Begin in the middle of the matrix.
+		int i = DungeonColsInRooms/2;
+		int j = DungeonRowsInRooms/2;
+		int numberOfRoomsInPath = 0;
+
+		bool continuousPathMade = CrawlMatrix (i, j, numberOfRoomsInPath);
+
+		if(!continuousPathMade)
 		{
-			for (int j = 0; j < connectedRoomsArray.GetLength(1); j++)
+			ResetBookmarking ();
+
+			//Start over....
+			EnsureContinuousPath ();
+		}
+		else
+		{
+			return;
+		}
+	}
+
+	void ResetBookmarking()
+	{
+		for (int i = 0; i < roomsArray.GetLength (0); i++)
+		{
+			for (int j = 0; j < roomsArray.GetLength (1); j++)
 			{
-				connectedRoomsArray [i, j] = false;
+				roomsArray [i, j].thisRoomCrawled = false;
 			}
 		}
 	}
 
-	//Initializes bookkeeping array for what rooms have hallway junctures
-	public void InitializeMatrixPathfindingArray ()
+	bool CrawlMatrix(int i, int j, int numberOfRoomsInPath)
 	{
-		for (int i = 0; i < roomsArray.GetLength(0); i++)
+		print ("i: " + i + " j: " + j);
+
+		//Base case: If we found an exit, return....
+		if (roomsArray [i, j].northExit || roomsArray [i, j].eastExit || roomsArray [i, j].southExit || roomsArray [i, j].westExit)
 		{
-			for (int j = 0; j < roomsArray.GetLength(1); j++)
-			{
-//				roomsArray[i, j].SetNorth = false;
-//				roomsArray[i, j].SetSouth = false;
-//				roomsArray[i, j].SetWest = false;
-//				roomsArray[i, j].SetEast = false;
-			}
+			return true;
+		}
+
+		//Otherwise, move indexes by following door-rich paths...
+		if (roomsArray [i, j].northDoor && !roomsArray[j-1, j].thisRoomCrawled)
+		{
+			j -= 1;
+			numberOfRoomsInPath += 1;
+			roomsArray [i, j].thisRoomCrawled = true;
+			CrawlMatrix (i, j, numberOfRoomsInPath);
+		}
+		else if (roomsArray [i, j].eastDoor && !roomsArray[i+1, j].thisRoomCrawled)
+		{
+			i += 1;
+			numberOfRoomsInPath += 1;
+			roomsArray [i, j].thisRoomCrawled = true;
+			CrawlMatrix (i, j, numberOfRoomsInPath);
+		}
+		else if (roomsArray [i, j].southDoor && !roomsArray[i, j+1].thisRoomCrawled)
+		{
+			j += 1;
+			numberOfRoomsInPath += 1;
+			roomsArray [i, j].thisRoomCrawled = true;
+			CrawlMatrix (i, j, numberOfRoomsInPath);
+		}
+		else if (roomsArray [i, j].westDoor && !roomsArray[i-1, j].thisRoomCrawled)
+		{
+			i -= 1;
+			numberOfRoomsInPath += 1;
+			roomsArray [i, j].thisRoomCrawled = true;
+			CrawlMatrix (i, j, numberOfRoomsInPath);
+		}
+
+		//If we haven't recursively called the function by now, we need to make another door and return false....
+		if (roomsArray [i, j].eastDoor)
+		{
+			//Door to the west....
+			GameObject newExit = Instantiate (juncturePrefab, new Vector3 (i * roomWidth - roomWidth / 2 - architectureOffset, j * roomHeight, 0), Quaternion.Euler (0, 0, -90)) as GameObject;
+			newExit.transform.parent = junctureParent;
+			return false;
+		}
+		else if (roomsArray [i, j].westDoor)
+		{
+			//Exit to the east....
+			GameObject newExit = Instantiate (juncturePrefab, new Vector3 (i * roomWidth + roomWidth / 2 + architectureOffset, j * roomHeight, 0), Quaternion.Euler (0, 0, 90)) as GameObject;
+			newExit.transform.parent = junctureParent;
+			return false;
+		}
+		else if (roomsArray [i, j].northDoor)
+		{
+			//Exit to the south....
+			GameObject newExit = Instantiate (juncturePrefab, new Vector3 (i * roomWidth, j * roomHeight + roomHeight / 2 + architectureOffset, 0), Quaternion.Euler (0, 0, 180)) as GameObject;
+			newExit.transform.parent = junctureParent;
+			return false;
+		}
+		else if (roomsArray [i, j].southDoor)
+		{
+			//Exit to the north....
+			GameObject newExit = Instantiate (juncturePrefab, new Vector3 (i * roomWidth, j * roomHeight - roomHeight / 2 - architectureOffset, 0), Quaternion.identity) as GameObject;
+			newExit.transform.parent = junctureParent;
+			return false;
 		}
 	}
-
+		
 	//Cut out orphan rooms....
 	public void RemoveOrphanedRooms()
 	{
-		for (int i = 0; i < connectedRoomsArray.GetLength(0); i++)
+		for (int i = 0; i < roomsArray.GetLength(0); i++)
 		{
-			for (int j = 0; j < connectedRoomsArray.GetLength (1); j++)
+			for (int j = 0; j < roomsArray.GetLength (1); j++)
 			{
-				if (connectedRoomsArray [i, j] == false)
+				if (!roomsArray [i, j].eastDoor && !roomsArray [i, j].eastExit && !roomsArray [i, j].westDoor && !roomsArray [i, j].westExit
+				    && !roomsArray [i, j].northDoor && !roomsArray [i, j].northExit && !roomsArray [i, j].southDoor && !roomsArray [i, j].southExit)
 				{
-					//TODO: FIX
-					//GameObject orphanedRoom = gameObjectArray [i, j];
-					//Destroy (orphanedRoom);
-
 					GameObject solidWall = Instantiate(solidWallPrefab, new Vector3(i * roomWidth, j * roomHeight, 0), Quaternion.identity) as GameObject;
 					solidWall.transform.parent = solidWallParent;
 				}
@@ -282,59 +360,4 @@ public class LevelManager : MonoBehaviour
 		
 		dungeonHolder.transform.position = adjustedDungeonPosition;
 	}
-
-	//Check for a continuous journey....
-//	public void MatrixContinuousPathCheck()
-//	{
-//		//Look at where the middle of the matrix is because that is where the player starts....
-//		int middleCol = DungeonColsInRooms / 2;
-//		int middleRow = DungeonRowsInRooms / 2;
-//
-//		int currentCol = middleCol;
-//		int currentRow = middleRow;
-//		int continuousRoomCount = 0;
-//
-//		//Check that there are continuous connections based on the Inspector variables...if not, make them...
-//		for (int i = 0; i < minRoomsBetweenEnterAndExit; i++)
-//		{
-//			//Check north....
-//			if (roomsArray[currentCol, currentRow].northDoor)
-//			{
-//				currentRow += 1;
-//				continuousRoomCount++;
-//			}
-//			else if (roomsArray[currentCol, currentRow].eastDoor)
-//			{
-//				currentCol += 1;
-//				continuousRoomCount++;
-//			}
-//			else if (roomsArray[currentCol, currentRow].southDoor)
-//			{
-//				currentRow -= 1;
-//				continuousRoomCount++;
-//			}
-//			else if (roomsArray[currentCol, currentRow].westDoor)
-//			{
-//				currentCol -= 1;
-//				continuousRoomCount++;
-//			}
-//			else
-//			{
-//				//If we have satisfied a path through the dungeon that is at least as long (in rooms) as specified....
-//				if (continuousRoomCount >= minRoomsBetweenEnterAndExit)
-//				{
-//					//Place an exit out of the dungeon in this room....
-//					GameObject exit = Instantiate(exitPrefab, new Vector3(currentCol * roomWidth + roomWidth / 2 + architectureOffset, currentRow * roomHeight, 0), Quaternion.identity) as GameObject;
-//
-//					//Shut it down: base case...
-//					return;
-//				}
-//				else
-//				{
-//					//TODO: HIERARCHICALLY DECOMPOSE REPEATED CODE INTO A FUNCTION!
-//					//Generate another door and call this function again....
-//				}
-//			}
-//		}
-//	}
 }
