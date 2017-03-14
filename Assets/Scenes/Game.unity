@@ -685,11 +685,16 @@ MonoBehaviour:
   - {fileID: 1682480074530496, guid: 97168ce0b5ad54ba2b9d206f40326c60, type: 2}
   - {fileID: 1467007092040560, guid: f7418463a82aa471aaaedaa6a7750bf0, type: 2}
   - {fileID: 1502535659396026, guid: ea49e9cf1c0a54288ada7200ac7c4600, type: 2}
+  - {fileID: 1679002987489402, guid: 9984dc8034556438c952ae7257a51e39, type: 2}
+  - {fileID: 1652806793077516, guid: 7c19d291715a549fd86402a80bab2812, type: 2}
+  - {fileID: 1015906441894126, guid: cee22591ad4e5457ca34a04b462ceb1e, type: 2}
+  - {fileID: 1102907806823556, guid: e90c390a4170a47b5acf74bbea08b6a9, type: 2}
   taggerTile: {fileID: 1322106267404420, guid: 6ccaf3116374445b7b132fb75fbb098a, type: 2}
   architectureParent: {fileID: 1508618358}
   junctureParent: {fileID: 1722098164}
   solidWallParent: {fileID: 244539772}
   architectureOffset: 0
+  debugMode: 0
 --- !u!1 &660970196
 GameObject:
   m_ObjectHideFlags: 0
