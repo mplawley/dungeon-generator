@@ -60,7 +60,10 @@ public class LevelManager : MonoBehaviour
 		PlaceRooms ();
 
 		//Ensure continuous path....
-		EnsureContinuousPath();
+		int i = DungeonColsInRooms/2;
+		int j = DungeonRowsInRooms/2;
+		int numberOfRoomsInPath = 0;
+		EnsureContinuousPath(i, j, numberOfRoomsInPath);
 
 		//Remove orphaned rooms
 		RemoveOrphanedRooms();
@@ -230,50 +233,50 @@ public class LevelManager : MonoBehaviour
 	}
 
 	//This ensures a continuous path between the player's start position and a dungeon exit....
-	public void EnsureContinuousPath()
+	public void EnsureContinuousPath(int i, int j, int numberOfRoomsInPath)
 	{
-		//Counters for navigating the matrix. Begin in the middle of the matrix.
-		int i = DungeonColsInRooms/2;
-		int j = DungeonRowsInRooms/2;
-		int numberOfRoomsInPath = 0;
+		//Base case 1: If we hit the edge of the map, make an exit and return....
+		if (i >= DungeonColsInRooms-1 || j >= DungeonRowsInRooms-1 || i <= 0 || j <= 0)
+		{
+			GameObject newDoor = Instantiate (juncturePrefab, new Vector3 (i * roomWidth + roomWidth / 2 + architectureOffset, j * roomHeight, 0), Quaternion.Euler (0, 0, 90)) as GameObject;
+			newDoor.transform.parent = junctureParent;
+			return;
+		}
 
-		CrawlMatrix (i, j, numberOfRoomsInPath);
-	}
-
-	void CrawlMatrix(int i, int j, int numberOfRoomsInPath)
-	{
-		//Base case: If we found an exit, return....
+		//Base case 2: If we found an exit, return....
 		if (roomsArray [i, j].northExit || roomsArray [i, j].eastExit || roomsArray [i, j].southExit || roomsArray [i, j].westExit)
 		{
 			return;
 		}
 
-		//Otherwise, move indexes by following door-rich paths...
+		//Mark this room as crawled and increment now many rooms we have crawled so far....
 		roomsArray [i, j].thisRoomCrawled = true;
 		numberOfRoomsInPath += 1;
 
-		if (roomsArray [i, j].northDoor && !roomsArray [j - 1, j].thisRoomCrawled && (j-1) >= 0)
+		//Follow paths populated by doors....
+		//Check indexes carefully as we crawl....
+		if (roomsArray [i, j].northDoor && !roomsArray [i, j - 1].thisRoomCrawled && (j - 1) >= 0)
 		{
 			j -= 1;
-			CrawlMatrix (i, j, numberOfRoomsInPath);
+			EnsureContinuousPath (i, j, numberOfRoomsInPath);
 		}
-		else if (roomsArray [i, j].eastDoor && !roomsArray [i + 1, j].thisRoomCrawled && (i+1) <= DungeonColsInRooms)
+		else if (roomsArray [i, j].eastDoor && !roomsArray [i + 1, j].thisRoomCrawled && (i + 1) <= DungeonColsInRooms)
 		{
 			i += 1;
-			CrawlMatrix (i, j, numberOfRoomsInPath);
+			EnsureContinuousPath (i, j, numberOfRoomsInPath);
 		}
 		else if (roomsArray [i, j].southDoor && !roomsArray [i, j + 1].thisRoomCrawled && (j+1) <= DungeonRowsInRooms)
 		{
 			j += 1;
-			CrawlMatrix (i, j, numberOfRoomsInPath);
+			EnsureContinuousPath (i, j, numberOfRoomsInPath);
 		}
 		else if (roomsArray [i, j].westDoor && !roomsArray [i - 1, j].thisRoomCrawled && (i-1) >= 0)
 		{
 			i -= 1;
-			CrawlMatrix (i, j, numberOfRoomsInPath);
+			EnsureContinuousPath (i, j, numberOfRoomsInPath);
 		}
 
-		//If we haven't recursively called the function by now, we need to make another door....
+		//If we haven't recursively called self by now, time to make a door....
 		if (roomsArray [i, j].eastDoor && (i-1) >= 0)
 		{
 			//Door to the west....
@@ -282,7 +285,7 @@ public class LevelManager : MonoBehaviour
 
 			//Go west...
 			i -= 1;
-			CrawlMatrix (i, j, numberOfRoomsInPath);
+			EnsureContinuousPath (i, j, numberOfRoomsInPath);
 		}
 		else if (roomsArray [i, j].westDoor && (i+1) <= DungeonColsInRooms)
 		{
@@ -292,7 +295,7 @@ public class LevelManager : MonoBehaviour
 
 			//Go east
 			i += 1;
-			CrawlMatrix (i, j, numberOfRoomsInPath);
+			EnsureContinuousPath (i, j, numberOfRoomsInPath);
 		}
 		else if (roomsArray [i, j].northDoor && (j+1) <= DungeonRowsInRooms)
 		{
@@ -302,7 +305,7 @@ public class LevelManager : MonoBehaviour
 
 			//Go south....
 			j += 1;
-			CrawlMatrix (i, j, numberOfRoomsInPath);
+			EnsureContinuousPath (i, j, numberOfRoomsInPath);
 		}
 		else if (roomsArray [i, j].southDoor && (j-1) >= 0)
 		{
@@ -312,17 +315,20 @@ public class LevelManager : MonoBehaviour
 
 			//Go north...
 			j -= 1;
-			CrawlMatrix (i, j, numberOfRoomsInPath);
+			EnsureContinuousPath (i, j, numberOfRoomsInPath);
 		}
 
-		//Otherwise, make an exit and return....
+		//If we still haven't called self by now, check against number of rooms required, make an exit if satisifed, and return....
 		if (numberOfRoomsInPath >= minRoomsBetweenEnterAndExit)
 		{
-			//TODO
+			//TODO: make an exit
 			return;
 		}
-
-		return;
+		else
+		{
+			//TODO: call self yet again
+			return;
+		}
 	}
 		
 	//Cut out orphan rooms....
