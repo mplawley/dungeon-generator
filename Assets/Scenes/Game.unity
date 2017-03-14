@@ -685,6 +685,7 @@ MonoBehaviour:
   - {fileID: 1682480074530496, guid: 97168ce0b5ad54ba2b9d206f40326c60, type: 2}
   - {fileID: 1467007092040560, guid: f7418463a82aa471aaaedaa6a7750bf0, type: 2}
   - {fileID: 1502535659396026, guid: ea49e9cf1c0a54288ada7200ac7c4600, type: 2}
+  taggerTile: {fileID: 1322106267404420, guid: 6ccaf3116374445b7b132fb75fbb098a, type: 2}
   architectureParent: {fileID: 1508618358}
   junctureParent: {fileID: 1722098164}
   solidWallParent: {fileID: 244539772}

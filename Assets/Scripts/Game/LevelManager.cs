@@ -42,12 +42,16 @@ public class LevelManager : MonoBehaviour
 	[Header("Housekeeping")]
 	//2DArray to meet specifics for a continous journey through the dungeon
 	public Room[,] roomsArray;
+	public GameObject taggerTile;
 
 	//Visual presentation
 	public Transform architectureParent;
 	public Transform junctureParent;
 	public Transform solidWallParent;
 	public float architectureOffset; //For visual pleasure of placement
+
+	//Debug
+	public bool debugMode;
 
 	// Use this for initialization
 	void Start()
@@ -235,10 +239,16 @@ public class LevelManager : MonoBehaviour
 	//This ensures a continuous path between the player's start position and a dungeon exit.
 	public void EnsureContinuousPath(int i, int j, int numberOfRoomsInPath)
 	{
+		//In debug mode, we can visualize paths from the start to key endpoints via blue tiles
+		if (debugMode)
+		{
+			SpawnObject (i, j, taggerTile);
+		}
+
 		//Base case 1: If we hit the edge of the map, make an exit and return.
 		if (i >= DungeonColsInRooms - 1 || j >= DungeonRowsInRooms - 1 || i <= 0 || j <= 0)
 		{
-			GameObject newDoor = Instantiate (juncturePrefab, new Vector3 (i * roomWidth + roomWidth / 2 + architectureOffset, j * roomHeight, 0), Quaternion.Euler (0, 0, 90)) as GameObject;
+			GameObject newDoor = Instantiate (exitPrefab, new Vector3 (i * roomWidth + roomWidth / 2 + architectureOffset, j * roomHeight, 0), Quaternion.Euler (0, 0, 90)) as GameObject;
 			newDoor.transform.parent = junctureParent;
 			return;
 		}
@@ -331,6 +341,12 @@ public class LevelManager : MonoBehaviour
 			//TODO: call self yet again
 			return;
 		}
+	}
+
+	void SpawnObject(int colCoordinate, int rowCoordinate, GameObject prefab)
+	{
+		GameObject spawnedObject = Instantiate (prefab, new Vector3 (colCoordinate * roomWidth, rowCoordinate * roomHeight, 0f), Quaternion.identity) as GameObject;
+		spawnedObject.transform.parent = junctureParent;
 	}
 		
 	//Cut out orphan rooms....
