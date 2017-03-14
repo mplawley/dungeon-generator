@@ -232,52 +232,56 @@ public class LevelManager : MonoBehaviour
 		}
 	}
 
-	//This ensures a continuous path between the player's start position and a dungeon exit....
+	//This ensures a continuous path between the player's start position and a dungeon exit.
 	public void EnsureContinuousPath(int i, int j, int numberOfRoomsInPath)
 	{
-		//Base case 1: If we hit the edge of the map, make an exit and return....
-		if (i >= DungeonColsInRooms-1 || j >= DungeonRowsInRooms-1 || i <= 0 || j <= 0)
+		//Base case 1: If we hit the edge of the map, make an exit and return.
+		if (i >= DungeonColsInRooms - 1 || j >= DungeonRowsInRooms - 1 || i <= 0 || j <= 0)
 		{
 			GameObject newDoor = Instantiate (juncturePrefab, new Vector3 (i * roomWidth + roomWidth / 2 + architectureOffset, j * roomHeight, 0), Quaternion.Euler (0, 0, 90)) as GameObject;
 			newDoor.transform.parent = junctureParent;
 			return;
 		}
-
-		//Base case 2: If we found an exit, return....
-		if (roomsArray [i, j].northExit || roomsArray [i, j].eastExit || roomsArray [i, j].southExit || roomsArray [i, j].westExit)
+		//Base case 2: If we found an exit in our crawl of the matrix, return because we have a continuous path from entrance to exit.
+		else if (roomsArray [i, j].northExit || roomsArray [i, j].eastExit || roomsArray [i, j].southExit || roomsArray [i, j].westExit)
+		{
+			return;
+		}
+		//Base case 3: We've already been here....
+		else if (roomsArray [i, j].thisRoomCrawled == true)
 		{
 			return;
 		}
 
-		//Mark this room as crawled and increment now many rooms we have crawled so far....
+		//Mark this room as crawled and increment now many rooms we have crawled so far.
 		roomsArray [i, j].thisRoomCrawled = true;
 		numberOfRoomsInPath += 1;
 
-		//Follow paths populated by doors....
-		//Check indexes carefully as we crawl....
-		if (roomsArray [i, j].northDoor && !roomsArray [i, j - 1].thisRoomCrawled && (j - 1) >= 0)
+		//Follow paths populated by doors, and check indexes carefully as we crawl.
+		if (roomsArray [i, j].northDoor && !roomsArray [i, j - 1].thisRoomCrawled && j - 1 >= 0)
 		{
 			j -= 1;
 			EnsureContinuousPath (i, j, numberOfRoomsInPath);
 		}
-		else if (roomsArray [i, j].eastDoor && !roomsArray [i + 1, j].thisRoomCrawled && (i + 1) <= DungeonColsInRooms)
+		else if (roomsArray [i, j].eastDoor && !roomsArray [i + 1, j].thisRoomCrawled && i + 1 <= DungeonColsInRooms)
 		{
 			i += 1;
 			EnsureContinuousPath (i, j, numberOfRoomsInPath);
+			return;
 		}
-		else if (roomsArray [i, j].southDoor && !roomsArray [i, j + 1].thisRoomCrawled && (j+1) <= DungeonRowsInRooms)
+		else if (roomsArray [i, j].southDoor && !roomsArray [i, j + 1].thisRoomCrawled && j+1 <= DungeonRowsInRooms)
 		{
 			j += 1;
 			EnsureContinuousPath (i, j, numberOfRoomsInPath);
 		}
-		else if (roomsArray [i, j].westDoor && !roomsArray [i - 1, j].thisRoomCrawled && (i-1) >= 0)
+		else if (roomsArray [i, j].westDoor && !roomsArray [i - 1, j].thisRoomCrawled && i-1 >= 0)
 		{
 			i -= 1;
 			EnsureContinuousPath (i, j, numberOfRoomsInPath);
 		}
 
 		//If we haven't recursively called self by now, time to make a door....
-		if (roomsArray [i, j].eastDoor && (i-1) >= 0)
+		if (roomsArray [i, j].eastDoor && i-1 >= 0)
 		{
 			//Door to the west....
 			GameObject newDoor = Instantiate (juncturePrefab, new Vector3 (i * roomWidth - roomWidth / 2 - architectureOffset, j * roomHeight, 0), Quaternion.Euler (0, 0, -90)) as GameObject;
@@ -285,9 +289,8 @@ public class LevelManager : MonoBehaviour
 
 			//Go west...
 			i -= 1;
-			EnsureContinuousPath (i, j, numberOfRoomsInPath);
 		}
-		else if (roomsArray [i, j].westDoor && (i+1) <= DungeonColsInRooms)
+		else if (roomsArray [i, j].westDoor && i+1 <= DungeonColsInRooms)
 		{
 			//Exit to the east....
 			GameObject newDoor = Instantiate (juncturePrefab, new Vector3 (i * roomWidth + roomWidth / 2 + architectureOffset, j * roomHeight, 0), Quaternion.Euler (0, 0, 90)) as GameObject;
@@ -295,9 +298,8 @@ public class LevelManager : MonoBehaviour
 
 			//Go east
 			i += 1;
-			EnsureContinuousPath (i, j, numberOfRoomsInPath);
 		}
-		else if (roomsArray [i, j].northDoor && (j+1) <= DungeonRowsInRooms)
+		else if (roomsArray [i, j].northDoor && j+1 <= DungeonRowsInRooms)
 		{
 			//Exit to the south....
 			GameObject newDoor = Instantiate (juncturePrefab, new Vector3 (i * roomWidth, j * roomHeight + roomHeight / 2 + architectureOffset, 0), Quaternion.Euler (0, 0, 180)) as GameObject;
@@ -305,9 +307,8 @@ public class LevelManager : MonoBehaviour
 
 			//Go south....
 			j += 1;
-			EnsureContinuousPath (i, j, numberOfRoomsInPath);
 		}
-		else if (roomsArray [i, j].southDoor && (j-1) >= 0)
+		else if (roomsArray [i, j].southDoor && j-1 >= 0)
 		{
 			//Exit to the north....
 			GameObject newDoor = Instantiate (juncturePrefab, new Vector3 (i * roomWidth, j * roomHeight - roomHeight / 2 - architectureOffset, 0), Quaternion.identity) as GameObject;
@@ -315,8 +316,9 @@ public class LevelManager : MonoBehaviour
 
 			//Go north...
 			j -= 1;
-			EnsureContinuousPath (i, j, numberOfRoomsInPath);
 		}
+
+		EnsureContinuousPath (i, j, numberOfRoomsInPath);
 
 		//If we still haven't called self by now, check against number of rooms required, make an exit if satisifed, and return....
 		if (numberOfRoomsInPath >= minRoomsBetweenEnterAndExit)
